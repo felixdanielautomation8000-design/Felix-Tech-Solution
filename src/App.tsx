@@ -17,9 +17,15 @@ import {
   Users,
   Building2,
   BarChart3,
-  Zap
+  Zap,
+  Target,
+  Calendar,
+  Loader2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+
+// --- Constants ---
+const BOOKING_URL = "https://calendar.app.google/tJyftT7GPccWr12m9";
 
 // --- Types ---
 type Page = 'home' | 'services' | 'industries' | 'portfolio' | 'about' | 'contact';
@@ -46,9 +52,12 @@ const Navbar = ({ currentPage, setCurrentPage }: { currentPage: Page, setCurrent
             className="flex items-center cursor-pointer" 
             onClick={() => setCurrentPage('home')}
           >
-            <div className="w-10 h-10 bg-gradient-to-br from-brand-blue to-brand-cyan rounded-lg flex items-center justify-center mr-3 glow-blue">
-              <Cpu className="text-brand-black w-6 h-6" />
-            </div>
+            <img 
+              src="https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Felix%20Logo.png" 
+              alt="Felix Tech Solutions Logo" 
+              className="h-10 w-auto mr-3 object-contain"
+              referrerPolicy="no-referrer"
+            />
             <span className="text-xl font-bold text-white tracking-tighter">FELIX TECH<span className="text-brand-blue">SOLUTIONS</span></span>
           </div>
 
@@ -65,12 +74,15 @@ const Navbar = ({ currentPage, setCurrentPage }: { currentPage: Page, setCurrent
                 {item.label}
               </button>
             ))}
-            <button 
-              onClick={() => setCurrentPage('contact')}
-              className="bg-brand-blue text-brand-black px-6 py-2.5 rounded-full text-sm font-bold hover:bg-brand-cyan transition-all glow-blue"
+            <a 
+              href={BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-brand-blue text-brand-black px-6 py-2.5 rounded-full text-sm font-bold hover:bg-brand-cyan transition-all glow-blue flex items-center gap-2"
             >
-              Book Strategy Call
-            </button>
+              <Calendar className="w-4 h-4" />
+              Book Appointment
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -104,16 +116,16 @@ const Navbar = ({ currentPage, setCurrentPage }: { currentPage: Page, setCurrent
                   {item.label}
                 </button>
               ))}
-              <div className="pt-4">
-                <button 
-                  onClick={() => {
-                    setCurrentPage('contact');
-                    setIsOpen(false);
-                  }}
-                  className="w-full bg-brand-blue text-brand-black px-6 py-3 rounded-xl text-center font-bold"
+              <div className="pt-6 px-3">
+                <a 
+                  href={BOOKING_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full bg-brand-blue text-brand-black px-6 py-4 rounded-xl text-center font-bold flex items-center justify-center gap-2 shadow-lg shadow-brand-blue/20"
                 >
-                  Book Strategy Call
-                </button>
+                  <Calendar className="w-5 h-5" />
+                  Book Appointment
+                </a>
               </div>
             </div>
           </motion.div>
@@ -148,13 +160,16 @@ const Hero = ({ onCtaClick }: { onCtaClick: (p: Page) => void }) => (
             We design AI agents, voice systems, and automation infrastructure that help U.S. businesses convert and retain customers 24/7.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button 
-              onClick={() => onCtaClick('contact')}
-              className="w-full sm:w-auto bg-brand-blue text-brand-black px-8 py-4 rounded-full font-bold text-lg hover:bg-brand-cyan transition-all glow-blue flex items-center justify-center group"
+            <a 
+              href={BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto bg-brand-blue text-brand-black px-8 py-4 rounded-full font-bold text-lg hover:bg-brand-cyan transition-all glow-blue flex items-center justify-center group gap-2"
             >
-              Book a Strategy Call
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
+              <Calendar className="w-5 h-5" />
+              Book Appointment
+              <ArrowRight className="ml-1 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </a>
             <button 
               onClick={() => onCtaClick('services')}
               className="w-full sm:w-auto bg-white/5 border border-white/10 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white/10 transition-all"
@@ -263,41 +278,96 @@ const IndustriesSection = () => {
 };
 
 const ContactForm = () => {
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
+    setStatus('loading');
+
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch('https://foundryngroup.app.n8n.cloud/webhook/290a423b-6cc7-4258-bce4-69b144ee952e', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...data,
+          submittedAt: new Date().toISOString(),
+          source: window.location.href
+        }),
+      });
+
+      if (response.ok) {
+        setStatus('success');
+      } else {
+        throw new Error('Failed to send message');
+      }
+    } catch (error) {
+      console.error('Webhook error:', error);
+      setStatus('error');
+      // Reset error after 5 seconds to allow retry
+      setTimeout(() => setStatus('idle'), 5000);
+    }
   };
 
-  if (submitted) {
+  if (status === 'success') {
     return (
-      <div className="p-12 rounded-3xl bg-glass text-center">
+      <div className="p-12 rounded-3xl bg-glass text-center border border-brand-blue/20">
         <div className="w-20 h-20 bg-brand-blue/20 rounded-full flex items-center justify-center mx-auto mb-6">
           <CheckCircle2 className="w-10 h-10 text-brand-blue" />
         </div>
         <h3 className="text-2xl font-bold text-white mb-2">Message Received!</h3>
         <p className="text-slate-400">Our team will reach out to you within 24 hours to schedule your strategy call.</p>
+        <button 
+          onClick={() => setStatus('idle')}
+          className="mt-8 text-brand-blue text-sm font-bold hover:underline"
+        >
+          Send another message
+        </button>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 p-8 md:p-12 rounded-3xl bg-glass border border-white/10">
+    <form onSubmit={handleSubmit} className="space-y-6 p-8 md:p-12 rounded-3xl bg-glass border border-white/10 relative">
+      {status === 'error' && (
+        <div className="absolute top-4 left-4 right-4 bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-2 rounded-lg text-sm text-center">
+          Something went wrong. Please try again or contact us directly.
+        </div>
+      )}
+      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-slate-400 mb-2">Full Name</label>
-          <input required type="text" className="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-blue outline-none transition-colors" placeholder="John Doe" />
+          <input 
+            required 
+            name="fullName"
+            type="text" 
+            className="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-blue outline-none transition-colors" 
+            placeholder="John Doe" 
+          />
         </div>
         <div>
           <label className="block text-sm font-medium text-slate-400 mb-2">Company Name</label>
-          <input required type="text" className="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-blue outline-none transition-colors" placeholder="Acme Inc." />
+          <input 
+            required 
+            name="companyName"
+            type="text" 
+            className="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-blue outline-none transition-colors" 
+            placeholder="Acme Inc." 
+          />
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-slate-400 mb-2">Industry</label>
-          <select className="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-blue outline-none transition-colors">
+          <select 
+            name="industry"
+            className="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-blue outline-none transition-colors"
+          >
             <option>Real Estate</option>
             <option>E-commerce</option>
             <option>Marketing</option>
@@ -308,7 +378,10 @@ const ContactForm = () => {
         </div>
         <div>
           <label className="block text-sm font-medium text-slate-400 mb-2">Business Size</label>
-          <select className="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-blue outline-none transition-colors">
+          <select 
+            name="businessSize"
+            className="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-blue outline-none transition-colors"
+          >
             <option>1-10 employees</option>
             <option>11-50 employees</option>
             <option>51-200 employees</option>
@@ -318,28 +391,53 @@ const ContactForm = () => {
       </div>
       <div>
         <label className="block text-sm font-medium text-slate-400 mb-2">Main Challenge</label>
-        <textarea required className="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-blue outline-none transition-colors h-32" placeholder="Tell us about the manual tasks you want to automate..."></textarea>
+        <textarea 
+          required 
+          name="challenge"
+          className="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-blue outline-none transition-colors h-32" 
+          placeholder="Tell us about the manual tasks you want to automate..."
+        ></textarea>
       </div>
       <div>
         <label className="block text-sm font-medium text-slate-400 mb-2">Phone Number</label>
-        <input required type="tel" className="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-blue outline-none transition-colors" placeholder="+1 (555) 000-0000" />
+        <input 
+          required 
+          name="phone"
+          type="tel" 
+          className="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-blue outline-none transition-colors" 
+          placeholder="+1 (555) 000-0000" 
+        />
       </div>
-      <button type="submit" className="w-full bg-brand-blue text-brand-black py-4 rounded-xl font-bold text-lg hover:bg-brand-cyan transition-all glow-blue">
-        Book My Strategy Call
+      <button 
+        disabled={status === 'loading'}
+        type="submit" 
+        className="w-full bg-white/10 text-white py-4 rounded-xl font-bold text-lg hover:bg-white/20 border border-white/10 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {status === 'loading' ? (
+          <>
+            <Loader2 className="w-5 h-5 animate-spin" />
+            Sending...
+          </>
+        ) : (
+          'Send Message'
+        )}
       </button>
     </form>
   );
 };
 
-const Footer = () => (
+const Footer = ({ setCurrentPage }: { setCurrentPage: (p: Page) => void }) => (
   <footer className="bg-brand-black border-t border-white/5 pt-20 pb-10">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
         <div className="col-span-1 md:col-span-2">
           <div className="flex items-center mb-6">
-            <div className="w-8 h-8 bg-gradient-to-br from-brand-blue to-brand-cyan rounded flex items-center justify-center mr-3">
-              <Cpu className="text-brand-black w-5 h-5" />
-            </div>
+            <img 
+              src="https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Felix%20Logo.png" 
+              alt="Felix Tech Solutions Logo" 
+              className="h-8 w-auto mr-3 object-contain"
+              referrerPolicy="no-referrer"
+            />
             <span className="text-lg font-bold text-white tracking-tighter uppercase">Felix Tech Solutions</span>
           </div>
           <p className="text-slate-400 max-w-sm mb-6">
@@ -366,10 +464,10 @@ const Footer = () => (
         <div>
           <h4 className="text-white font-bold mb-6">Company</h4>
           <ul className="space-y-4 text-sm text-slate-400">
-            <li><a href="#" className="hover:text-brand-blue transition-colors">About Us</a></li>
-            <li><a href="#" className="hover:text-brand-blue transition-colors">Portfolio</a></li>
-            <li><a href="#" className="hover:text-brand-blue transition-colors">Contact</a></li>
-            <li><a href="#" className="hover:text-brand-blue transition-colors">Privacy Policy</a></li>
+            <li><button onClick={() => setCurrentPage('about')} className="hover:text-brand-blue transition-colors">About Us</button></li>
+            <li><button onClick={() => setCurrentPage('portfolio')} className="hover:text-brand-blue transition-colors">Portfolio</button></li>
+            <li><button onClick={() => setCurrentPage('contact')} className="hover:text-brand-blue transition-colors">Contact</button></li>
+            <li><a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="text-brand-blue font-bold hover:underline">Book Appointment</a></li>
           </ul>
         </div>
       </div>
@@ -565,46 +663,130 @@ const PortfolioPage = () => (
 const AboutPage = () => (
   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pt-32 pb-24">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* SECTION 1: INTRO / POSITIONING */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center mb-32">
         <div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-8">Positioning for the <span className="text-gradient">Future</span></h1>
-          <p className="text-xl text-slate-400 leading-relaxed mb-8">
-            Felix Tech Solutions is a U.S.-focused AI Automation Agency that designs and deploys intelligent voice systems and workflow automation for modern businesses.
-          </p>
-          <div className="grid grid-cols-2 gap-8">
-            <div>
-              <h4 className="text-white font-bold mb-2">Our Vision</h4>
-              <p className="text-sm text-slate-400">To become the standard for enterprise-grade AI implementation in the United States.</p>
-            </div>
-            <div>
-              <h4 className="text-white font-bold mb-2">Our Mission</h4>
-              <p className="text-sm text-slate-400">To empower businesses with scalable growth systems that eliminate manual repetitive tasks.</p>
-            </div>
+          <h1 className="text-4xl md:text-6xl font-bold mb-8 tracking-tight">Positioning for the <span className="text-gradient">Future</span></h1>
+          <div className="space-y-6">
+            <p className="text-xl text-slate-200 leading-relaxed">
+              Felix Tech Solutions is a U.S.-focused AI Automation Agency that designs and deploys intelligent voice systems and workflow automation for modern businesses.
+            </p>
+            <p className="text-lg text-slate-400 leading-relaxed">
+              We help organizations streamline operations, capture more opportunities, and scale efficiently through tailored AI infrastructure.
+            </p>
           </div>
         </div>
         <div className="relative">
-          <div className="aspect-square rounded-[60px] bg-gradient-to-br from-brand-blue/20 to-brand-cyan/20 border border-white/10 overflow-hidden">
-            <img src="https://picsum.photos/seed/team/800/800" alt="Team" className="w-full h-full object-cover opacity-50" referrerPolicy="no-referrer" />
+          <div className="aspect-[4/5] rounded-[40px] bg-gradient-to-br from-brand-blue/20 to-brand-cyan/20 border border-white/10 overflow-hidden glow-blue">
+            <img 
+              src="https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Felix%20About%20Pic.png" 
+              alt="Felix - Founder of Felix Tech Solutions" 
+              className="w-full h-full object-cover" 
+              referrerPolicy="no-referrer" 
+            />
           </div>
         </div>
       </div>
 
-      <div className="text-center mb-16">
-        <h2 className="text-3xl font-bold mb-4">Commitment to Innovation</h2>
-        <p className="text-slate-400 max-w-2xl mx-auto">We don't just follow trends; we build the infrastructure that powers them.</p>
+      {/* SECTION 2: VISION & MISSION */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-32">
+        <div className="p-10 rounded-[32px] bg-glass border border-white/5 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+            <Target className="w-24 h-24 text-brand-blue" />
+          </div>
+          <h4 className="text-brand-blue font-bold uppercase tracking-widest text-sm mb-4">Our Vision</h4>
+          <p className="text-2xl text-white font-medium leading-snug">
+            To become the standard for enterprise-grade AI implementation in the United States.
+          </p>
+        </div>
+        <div className="p-10 rounded-[32px] bg-glass border border-white/5 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+            <Zap className="w-24 h-24 text-brand-cyan" />
+          </div>
+          <h4 className="text-brand-cyan font-bold uppercase tracking-widest text-sm mb-4">Our Mission</h4>
+          <p className="text-2xl text-white font-medium leading-snug">
+            To empower businesses with scalable growth systems that eliminate manual repetitive tasks, improve response times, and increase operational efficiency.
+          </p>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {/* SECTION 3: MEET THE FOUNDER */}
+      <div className="mb-32">
+        <div className="max-w-3xl">
+          <h2 className="text-3xl md:text-4xl font-bold mb-8">Meet Felix — <span className="text-gradient">Founder of Felix Tech Solutions</span></h2>
+          <div className="space-y-6 text-slate-400 text-lg leading-relaxed">
+            <p>
+              Felix is the founder of Felix Tech Solutions, an AI Automation Agency focused on helping U.S. businesses eliminate inefficiencies and scale through intelligent systems.
+            </p>
+            <p>
+              With a strong focus on automation, AI-driven communication, and operational workflows, Felix built the company to solve a critical problem many businesses face — manual processes that slow growth and reduce efficiency.
+            </p>
+            <p>
+              Rather than offering generic solutions, Felix Tech Solutions is designed to create tailored AI systems that integrate directly into business operations — from lead capture and follow-up to customer support and sales automation.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* SECTION 4: THE STORY */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start mb-32">
+        <div className="sticky top-32">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">The Story Behind <br/><span className="text-gradient">Felix Tech Solutions</span></h2>
+          <div className="w-20 h-1 bg-brand-blue rounded-full" />
+        </div>
+        <div className="space-y-8 text-slate-400 text-lg leading-relaxed">
+          <p>
+            Felix Tech Solutions was founded on a clear observation: many businesses lose revenue daily due to slow response times, missed leads, and inefficient systems.
+          </p>
+          <p>
+            While AI technology has advanced rapidly, most organizations struggle to implement it in a practical and results-driven way.
+          </p>
+          <p>
+            Felix identified the gap between what AI is capable of and how businesses are actually using it.
+          </p>
+          <div className="p-8 rounded-3xl bg-white/5 border border-white/10">
+            <p className="text-white font-bold mb-6">Felix Tech Solutions was built to close that gap by delivering scalable AI systems that:</p>
+            <ul className="space-y-4">
+              {[
+                "Respond instantly to leads",
+                "Automate repetitive workflows",
+                "Improve customer experience",
+                "Increase operational efficiency"
+              ].map((item, i) => (
+                <li key={i} className="flex items-center gap-3 text-slate-300">
+                  <div className="w-1.5 h-1.5 rounded-full bg-brand-blue" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* SECTION 5: EXPERIENCE & EXPERTISE */}
+      <div className="text-center mb-16">
+        <h2 className="text-3xl md:text-4xl font-bold mb-4">Experience & <span className="text-gradient">Expertise</span></h2>
+        <p className="text-slate-400 max-w-2xl mx-auto">We specialize in designing and deploying high-impact AI infrastructure.</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { title: "Corporate Tone", desc: "We speak the language of business, focusing on ROI and operational efficiency." },
-          { title: "Confident Expertise", desc: "Our team consists of specialists in advanced language models and voice synthesis." },
-          { title: "Professional Delivery", desc: "Every project is managed with enterprise-level precision and clear communication." }
+          { title: "AI Chatbots", desc: "Systems for customer engagement and instant support." },
+          { title: "Voice Agents", desc: "AI-driven communication for 24/7 availability." },
+          { title: "Workflow Automation", desc: "CRM and process optimization for sales teams." },
+          { title: "Lead Nurturing", desc: "Systems that convert prospects into loyal clients." }
         ].map((item, i) => (
-          <div key={i} className="p-8 rounded-3xl bg-glass border border-white/5 text-center">
-            <h4 className="text-xl font-bold text-white mb-4">{item.title}</h4>
+          <div key={i} className="p-8 rounded-3xl bg-glass border border-white/5 hover:border-brand-blue/30 transition-all group">
+            <h4 className="text-xl font-bold text-white mb-4 group-hover:text-brand-blue transition-colors">{item.title}</h4>
             <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
           </div>
         ))}
+      </div>
+      
+      <div className="mt-16 text-center">
+        <p className="text-slate-500 italic">
+          Each system is built with a clear objective: deliver measurable business outcomes, not just technology.
+        </p>
       </div>
     </div>
   </motion.div>
@@ -621,6 +803,20 @@ const ContactPage = () => (
           </p>
           
           <div className="space-y-8">
+            <div className="p-8 rounded-3xl bg-gradient-to-br from-brand-blue/10 to-brand-cyan/10 border border-brand-blue/20">
+              <h3 className="text-2xl font-bold text-white mb-4">Direct Booking</h3>
+              <p className="text-slate-400 mb-6">Skip the form and pick a time that works for you on our calendar.</p>
+              <a 
+                href={BOOKING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-brand-blue text-brand-black px-8 py-4 rounded-xl font-bold hover:bg-brand-cyan transition-all glow-blue"
+              >
+                <Calendar className="w-5 h-5" />
+                Book Appointment Now
+              </a>
+            </div>
+
             <div className="flex items-center gap-6">
               <div className="w-14 h-14 rounded-2xl bg-brand-blue/10 flex items-center justify-center text-brand-blue">
                 <Mail className="w-6 h-6" />
@@ -697,7 +893,7 @@ export default function App() {
         </AnimatePresence>
       </main>
 
-      <Footer />
+      <Footer setCurrentPage={setCurrentPage} />
     </div>
   );
 }
