@@ -792,15 +792,27 @@ const ContactForm = () => {
           placeholder="Tell us about the manual tasks you want to automate..."
         ></textarea>
       </div>
-      <div>
-        <label className="block text-sm font-medium text-slate-400 mb-2">Phone Number</label>
-        <input 
-          required 
-          name="phone"
-          type="tel" 
-          className="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-blue outline-none transition-colors" 
-          placeholder="+1 (555) 000-0000" 
-        />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className="block text-sm font-medium text-slate-400 mb-2">Company Email</label>
+          <input 
+            required 
+            name="email"
+            type="email" 
+            className="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-blue outline-none transition-colors" 
+            placeholder="john@company.com" 
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-400 mb-2">Phone Number</label>
+          <input 
+            required 
+            name="phone"
+            type="tel" 
+            className="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-blue outline-none transition-colors" 
+            placeholder="+1 (555) 000-0000" 
+          />
+        </div>
       </div>
       <button 
         disabled={status === 'loading'}
