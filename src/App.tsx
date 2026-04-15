@@ -197,7 +197,7 @@ const Hero = ({ onCtaClick }: { onCtaClick: (p: Page) => void }) => (
   <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden min-h-[80vh] flex items-center">
     {/* Video Background */}
     <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-      <div className="absolute inset-0 bg-brand-black/70 z-10" />
+      <div className="absolute inset-0 bg-brand-black/40 z-10" />
       <iframe
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[177.77vh] min-w-full h-[56.25vw] min-h-full"
         src="https://www.youtube.com/embed/omSHRkIIPwM?autoplay=1&mute=1&loop=1&playlist=omSHRkIIPwM&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0&playsinline=1&enablejsapi=0"
@@ -567,46 +567,55 @@ const IndustriesSection = () => {
     { 
       icon: <Building2 />, 
       name: "Real Estate Firms",
+      description: "Automate lead qualification, property inquiries, and appointment scheduling to close deals faster.",
       image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Create_a_highly_202604121215.png"
     },
     { 
       icon: <Globe />, 
       name: "E-commerce Brands",
+      description: "Enhance customer experience with AI-driven product recommendations and 24/7 automated support.",
       image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Create_a_futuristic_202604121222.png"
     },
     { 
       icon: <BarChart3 />, 
       name: "Marketing Agencies",
+      description: "Scale content production and data analysis with custom AI workflows tailored for client success.",
       image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Create_a_cinematic_202604121226.png"
     },
     { 
       icon: <Users />, 
       name: "Coaches & Consultants",
+      description: "Streamline client onboarding and support with personalized AI assistants that reflect your expertise.",
       image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Create_a_warm_202604121232.png"
     },
     { 
       icon: <Cpu />, 
       name: "Enterprise Organizations",
+      description: "Integrate scalable AI infrastructure to optimize complex operations and drive cross-departmental efficiency.",
       image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Create_a_large-scale_202604121135.png"
     },
     { 
       icon: <GraduationCap />, 
-      name: "Educational Institutions & EdTech (Education Technology)",
+      name: "Educational Institutions & EdTech",
+      description: "Empower learning with AI tutors and administrative automation for a more personalized student experience.",
       image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Create_a_clean,_202604130329.png"
     },
     { 
       icon: <Sprout />, 
-      name: "Agriculture & Farming (incl. Agri-Tech)",
+      name: "Agriculture & Farming",
+      description: "Leverage AI for precision monitoring and predictive analytics to maximize yield and operational efficiency.",
       image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Create_a_realistic_202604130312.png"
     },
     { 
       icon: <Fish />, 
       name: "Commercial Fishing & Aquaculture",
+      description: "Optimize supply chains and monitor aquatic environments with intelligent AI-driven data systems.",
       image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Create_a_realistic_202604130337.png"
     },
     { 
       icon: <Utensils />, 
       name: "Restaurants & Food Services",
+      description: "Improve guest satisfaction with automated reservations, order management, and AI-powered customer feedback.",
       image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Create_a_modern_202604130319.png"
     }
   ];
@@ -618,15 +627,15 @@ const IndustriesSection = () => {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Industries We Serve</h2>
           <p className="text-slate-400 max-w-2xl mx-auto">Tailored AI solutions for high-growth sectors looking to automate and scale.</p>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {industries.map((ind, i) => (
             <div 
               key={i} 
-              className="p-6 rounded-2xl bg-white/5 border border-white/5 text-center hover:bg-brand-blue/5 hover:border-brand-blue/20 transition-all group overflow-hidden flex flex-col items-center cursor-pointer"
+              className="p-8 rounded-3xl bg-white/5 border border-white/5 text-left hover:bg-brand-blue/5 hover:border-brand-blue/20 transition-all group overflow-hidden flex flex-col cursor-pointer"
               onClick={() => ind.image && setSelectedImage({ src: ind.image, alt: ind.name })}
             >
-              {ind.image ? (
-                <div className="w-full aspect-square mb-4 rounded-xl overflow-hidden border border-white/10 relative">
+              {ind.image && (
+                <div className="w-full aspect-video mb-6 rounded-2xl overflow-hidden border border-white/10 relative">
                   <img 
                     src={ind.image} 
                     alt={ind.name} 
@@ -637,12 +646,16 @@ const IndustriesSection = () => {
                     <Maximize2 className="w-8 h-8 text-white" />
                   </div>
                 </div>
-              ) : (
-                <div className="w-12 h-12 mx-auto mb-4 text-slate-500 group-hover:text-brand-blue transition-colors">
+              )}
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-lg bg-brand-blue/10 flex items-center justify-center text-brand-blue group-hover:scale-110 transition-transform">
                   {ind.icon}
                 </div>
-              )}
-              <span className="text-sm font-semibold text-slate-300 group-hover:text-white">{ind.name}</span>
+                <h3 className="text-lg font-bold text-white group-hover:text-brand-blue transition-colors">{ind.name}</h3>
+              </div>
+              <p className="text-sm text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors">
+                {ind.description}
+              </p>
             </div>
           ))}
         </div>
@@ -895,8 +908,20 @@ const HomePage = ({ setPage }: { setPage: (p: Page) => void }) => (
           <div className="relative">
             <div className="rounded-3xl overflow-hidden border border-white/10 shadow-2xl glow-blue">
               <CardVideo videoId="tjbI1sgEQto" noMargin />
-              
             </div>
+            
+            {/* Watch Full Demo Button */}
+            <div className="mt-6">
+              <button 
+                onClick={() => window.open('https://www.youtube.com/watch?v=tjbI1sgEQto', '_blank')}
+                className="w-full py-4 bg-brand-blue text-brand-black rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-brand-cyan transition-all glow-blue group/btn"
+              >
+                <Play className="w-5 h-5 fill-current" />
+                Watch Full Demo
+                <ExternalLink className="w-4 h-4 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
+              </button>
+            </div>
+
             {/* Floating Stats */}
             <div className="absolute -bottom-6 -left-6 p-6 rounded-2xl bg-glass border border-white/10 shadow-2xl">
               <p className="text-3xl font-bold text-white">24/7</p>
