@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   Bot, 
   Mic, 
@@ -20,7 +21,17 @@ import {
   Zap,
   Target,
   Calendar,
-  Loader2
+  Loader2,
+  Volume2,
+  VolumeX,
+  Play,
+  Pause,
+  Maximize2,
+  Minimize2,
+  GraduationCap,
+  Sprout,
+  Fish,
+  Utensils
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -30,7 +41,54 @@ const BOOKING_URL = "https://calendar.app.google/tJyftT7GPccWr12m9";
 // --- Types ---
 type Page = 'home' | 'services' | 'industries' | 'portfolio' | 'about' | 'contact';
 
+interface Service {
+  title: string;
+  description: string;
+  features: string[];
+  videoId?: string;
+  videoUrl?: string;
+  icon?: React.ReactNode;
+}
+
 // --- Components ---
+
+const ImageLightbox = ({ src, alt, isOpen, onClose }: { src: string, alt: string, isOpen: boolean, onClose: () => void }) => {
+  return (
+    <AnimatePresence>
+      {isOpen && createPortal(
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+          className="fixed inset-0 z-[9999] bg-brand-black/95 backdrop-blur-xl flex items-center justify-center p-4 md:p-10 cursor-zoom-out"
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            className="relative max-w-5xl w-full aspect-auto rounded-3xl overflow-hidden shadow-2xl border border-white/10"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img 
+              src={src} 
+              alt={alt} 
+              className="w-full h-auto max-h-[85vh] object-contain"
+              referrerPolicy="no-referrer"
+            />
+            <button 
+              onClick={onClose}
+              className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white transition-all border border-white/10"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </motion.div>
+        </motion.div>,
+        document.body
+      )}
+    </AnimatePresence>
+  );
+};
 
 const Navbar = ({ currentPage, setCurrentPage }: { currentPage: Page, setCurrentPage: (p: Page) => void }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,12 +111,12 @@ const Navbar = ({ currentPage, setCurrentPage }: { currentPage: Page, setCurrent
             onClick={() => setCurrentPage('home')}
           >
             <img 
-              src="https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Felix%20Logo.png" 
-              alt="Felix Tech Solutions Logo" 
-              className="h-10 w-auto mr-3 object-contain"
+              src="https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Anvil%20logo.png" 
+              alt="Anvilai LLC Logo" 
+              className="h-12 w-auto mr-3 object-contain drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]"
               referrerPolicy="no-referrer"
             />
-            <span className="text-xl font-bold text-white tracking-tighter">FELIX TECH<span className="text-brand-blue">SOLUTIONS</span></span>
+            <span className="text-xl font-extrabold text-white tracking-tighter">ANVILAI <span className="text-brand-blue">LLC</span></span>
           </div>
 
           {/* Desktop Nav */}
@@ -136,9 +194,20 @@ const Navbar = ({ currentPage, setCurrentPage }: { currentPage: Page, setCurrent
 };
 
 const Hero = ({ onCtaClick }: { onCtaClick: (p: Page) => void }) => (
-  <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+  <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden min-h-[80vh] flex items-center">
+    {/* Video Background */}
+    <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 bg-brand-black/70 z-10" />
+      <iframe
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[177.77vh] min-w-full h-[56.25vw] min-h-full"
+        src="https://www.youtube.com/embed/omSHRkIIPwM?autoplay=1&mute=1&loop=1&playlist=omSHRkIIPwM&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0&playsinline=1&enablejsapi=0"
+        allow="autoplay; encrypted-media"
+        title="Background Video"
+      />
+    </div>
+
     {/* Background Glows */}
-    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none z-[5]">
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-blue/10 blur-[120px] rounded-full" />
       <div className="absolute bottom-[10%] right-[-10%] w-[30%] h-[30%] bg-brand-cyan/10 blur-[100px] rounded-full" />
     </div>
@@ -183,31 +252,253 @@ const Hero = ({ onCtaClick }: { onCtaClick: (p: Page) => void }) => (
   </section>
 );
 
+const CardVideo = ({ videoId, videoUrl, noMargin = false }: { videoId?: string, videoUrl?: string, noMargin?: boolean }) => {
+  const [isMuted, setIsMuted] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const expandedIframeRef = useRef<HTMLIFrameElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const expandedVideoRef = useRef<HTMLVideoElement>(null);
+  
+  // Use a stable origin for YouTube API
+  const origin = typeof window !== 'undefined' ? window.location.origin : '';
+
+  const sendYTCommand = (ref: React.RefObject<HTMLIFrameElement | null>, func: string, args: any[] = []) => {
+    if (ref.current?.contentWindow) {
+      ref.current.contentWindow.postMessage(
+        JSON.stringify({
+          event: 'command',
+          func: func,
+          args: args
+        }),
+        '*'
+      );
+    }
+  };
+
+  // Handle initialization and expansion transitions
+  useEffect(() => {
+    const activeRef = isExpanded ? expandedIframeRef : iframeRef;
+    const activeVideo = isExpanded ? expandedVideoRef.current : videoRef.current;
+
+    if (videoId) {
+      // Delay to ensure iframe is ready after mount/expansion
+      const timer = setTimeout(() => {
+        if (isPlaying) {
+          sendYTCommand(activeRef, 'playVideo');
+          sendYTCommand(activeRef, isMuted ? 'mute' : 'unMute');
+          if (!isMuted) sendYTCommand(activeRef, 'setVolume', [100]);
+        } else {
+          sendYTCommand(activeRef, 'pauseVideo');
+        }
+      }, 800);
+      return () => clearTimeout(timer);
+    } else if (videoUrl && activeVideo) {
+      if (isPlaying) activeVideo.play().catch(() => {});
+      else activeVideo.pause();
+      activeVideo.muted = isMuted;
+      activeVideo.volume = isMuted ? 0 : 1;
+    }
+  }, [isExpanded, videoId, videoUrl]); // Only run on mount or expansion change
+
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const newMuted = !isMuted;
+    setIsMuted(newMuted);
+    
+    const activeRef = isExpanded ? expandedIframeRef : iframeRef;
+    const activeVideo = isExpanded ? expandedVideoRef.current : videoRef.current;
+
+    if (videoId) {
+      sendYTCommand(activeRef, newMuted ? 'mute' : 'unMute');
+      if (!newMuted) sendYTCommand(activeRef, 'setVolume', [100]);
+      // Ensure it keeps playing when toggling mute
+      if (isPlaying) sendYTCommand(activeRef, 'playVideo');
+    } else if (videoUrl && activeVideo) {
+      activeVideo.muted = newMuted;
+      activeVideo.volume = newMuted ? 0 : 1;
+      if (isPlaying) activeVideo.play().catch(() => {});
+    }
+  };
+
+  const togglePlay = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const newPlaying = !isPlaying;
+    setIsPlaying(newPlaying);
+
+    const activeRef = isExpanded ? expandedIframeRef : iframeRef;
+    const activeVideo = isExpanded ? expandedVideoRef.current : videoRef.current;
+
+    if (videoId) {
+      sendYTCommand(activeRef, newPlaying ? 'playVideo' : 'pauseVideo');
+    } else if (videoUrl && activeVideo) {
+      if (newPlaying) activeVideo.play().catch(() => {});
+      else activeVideo.pause();
+    }
+  };
+
+  const toggleExpand = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const nextExpanded = !isExpanded;
+    
+    // Pause current before switching
+    const currentRef = isExpanded ? expandedIframeRef : iframeRef;
+    const currentVideo = isExpanded ? expandedVideoRef.current : videoRef.current;
+    
+    if (videoId) sendYTCommand(currentRef, 'pauseVideo');
+    else if (videoUrl && currentVideo) currentVideo.pause();
+
+    setIsExpanded(nextExpanded);
+    setIsPlaying(true); // Always play when switching/expanding
+  };
+
+  const renderVideo = (isExpandedView: boolean) => {
+    // If we are in expanded view, don't render the background one to avoid conflicts
+    if (isExpanded && !isExpandedView) {
+      return (
+        <div className="absolute inset-0 bg-brand-black flex items-center justify-center">
+          <Loader2 className="w-8 h-8 text-brand-blue animate-spin" />
+        </div>
+      );
+    }
+
+    if (videoId) {
+      const videoSrc = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&origin=${origin}&cc_load_policy=1`;
+      return (
+        <iframe
+          ref={isExpandedView ? expandedIframeRef : iframeRef}
+          className={`absolute inset-0 w-full h-full ${!isExpandedView ? 'pointer-events-none scale-[1.01]' : ''}`}
+          src={videoSrc}
+          allow="autoplay; encrypted-media"
+          title={isExpandedView ? "Service Video Expanded" : "Service Video"}
+          loading="lazy"
+        />
+      );
+    }
+    if (videoUrl) {
+      return (
+        <video
+          ref={isExpandedView ? expandedVideoRef : videoRef}
+          src={videoUrl}
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          muted={isMuted}
+          loop
+          playsInline
+          aria-label="Service Demonstration Video"
+        />
+      );
+    }
+    return null;
+  };
+
+  return (
+    <>
+      <div className={`relative w-full aspect-video rounded-2xl overflow-hidden ${noMargin ? '' : 'mb-6'} group border border-white/5 shadow-2xl`}>
+        <div className="absolute inset-0 bg-brand-black/20 z-10 pointer-events-none" />
+        {renderVideo(false)}
+        <div className="absolute bottom-3 right-3 z-20 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button 
+            type="button"
+            onClick={togglePlay}
+            className="p-2 bg-brand-black/60 backdrop-blur-md rounded-xl text-white hover:bg-brand-blue transition-all border border-white/10 shadow-lg"
+          >
+            {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+          </button>
+          <button 
+            type="button"
+            onClick={toggleMute}
+            className="p-2 bg-brand-black/60 backdrop-blur-md rounded-xl text-white hover:bg-brand-blue transition-all border border-white/10 shadow-lg"
+          >
+            {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+          </button>
+          <button 
+            type="button"
+            onClick={toggleExpand}
+            className="p-2 bg-brand-black/60 backdrop-blur-md rounded-xl text-white hover:bg-brand-blue transition-all border border-white/10 shadow-lg"
+          >
+            <Maximize2 className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {isExpanded && createPortal(
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] bg-brand-black/95 backdrop-blur-xl flex items-center justify-center p-4 md:p-10"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative w-full max-w-6xl aspect-video rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(59,130,246,0.3)] border border-white/10 bg-black"
+            >
+              {renderVideo(true)}
+              
+              {/* Expanded Controls */}
+              <div className="absolute top-6 right-6 z-30">
+                <button 
+                  onClick={toggleExpand}
+                  className="p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white transition-all border border-white/10"
+                >
+                  <Minimize2 className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-4">
+                <button 
+                  onClick={togglePlay}
+                  className="px-6 py-3 bg-brand-blue text-brand-black rounded-full font-bold flex items-center gap-2 hover:bg-brand-cyan transition-all glow-blue"
+                >
+                  {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+                  {isPlaying ? 'Pause' : 'Play'}
+                </button>
+                <button 
+                  onClick={toggleMute}
+                  className="px-6 py-3 bg-white/10 backdrop-blur-md text-white rounded-full font-bold flex items-center gap-2 hover:bg-white/20 transition-all border border-white/10"
+                >
+                  {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                  {isMuted ? 'Unmute' : 'Mute'}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>,
+          document.body
+        )}
+      </AnimatePresence>
+    </>
+  );
+};
+
 const ServicesGrid = () => {
-  const services = [
+  const services: Service[] = [
     {
-      icon: <Bot className="w-8 h-8" />,
       title: "AI Chatbots",
       description: "Custom website AI chatbots and WhatsApp automation bots designed to capture leads and support customers instantly.",
-      features: ["Website AI Chatbots", "WhatsApp Automation", "Instagram DM Automation", "AI Customer Support"]
+      features: ["Website AI Chatbots", "WhatsApp Automation", "Instagram DM Automation", "AI Customer Support"],
+      videoId: "cg1IO3Opk28"
     },
     {
-      icon: <Mic className="w-8 h-8" />,
       title: "AI Voice Agents",
       description: "Human-like voice agents for 24/7 reception, appointment setting, and lead qualification.",
-      features: ["24/7 AI Receptionists", "Appointment Setting Bots", "Lead Qualification Agents", "Call Center Automation"]
+      features: ["24/7 AI Receptionists", "Appointment Setting Bots", "Lead Qualification Agents", "Call Center Automation"],
+      videoId: "omSHRkIIPwM"
     },
     {
-      icon: <Workflow className="w-8 h-8" />,
       title: "Workflow Automation",
       description: "Streamline your operations with end-to-end CRM and pipeline automation systems.",
-      features: ["CRM Pipeline Automation", "Email Sequences", "Lead Nurturing Systems", "Sales Process Automation"]
+      features: ["CRM Pipeline Automation", "Email Sequences", "Lead Nurturing Systems", "Sales Process Automation"],
+      videoUrl: "https://v3b.fal.media/files/b/0a95f170/-bUStROaB4R5y19RmvVMs_merged_video.mp4"
     },
     {
-      icon: <Cpu className="w-8 h-8" />,
       title: "Enterprise AI Integration",
       description: "Seamlessly integrate advanced AI models into your existing business infrastructure for maximum ROI.",
-      features: ["Custom AI Strategy", "API Integrations", "Data Analysis Automation", "Scalable AI Infrastructure"]
+      features: ["Custom AI Strategy", "API Integrations", "Data Analysis Automation", "Scalable AI Infrastructure"],
+      videoId: "tjbI1sgEQto"
     }
   ];
 
@@ -223,21 +514,44 @@ const ServicesGrid = () => {
             <motion.div
               key={i}
               whileHover={{ y: -5 }}
-              className="p-8 rounded-3xl bg-glass neon-border"
+              className="relative p-8 rounded-3xl bg-glass neon-border overflow-hidden group flex flex-col"
             >
-              <div className="w-16 h-16 bg-brand-blue/10 rounded-2xl flex items-center justify-center text-brand-blue mb-6">
-                {s.icon}
+              <div className="relative z-10 flex flex-col h-full">
+                {s.videoId || s.videoUrl ? (
+                  <CardVideo videoId={s.videoId} videoUrl={s.videoUrl} />
+                ) : (
+                  <div className="w-16 h-16 bg-brand-blue/10 rounded-2xl flex items-center justify-center text-brand-blue mb-6">
+                    {s.icon}
+                  </div>
+                )}
+                <h3 className="text-2xl font-bold mb-4 text-white">{s.title}</h3>
+                <p className="text-slate-400 mb-6 leading-relaxed">{s.description}</p>
+                <ul className="space-y-3 mt-auto mb-8">
+                  {s.features.map((f, j) => (
+                    <li key={j} className="flex items-center text-sm text-slate-300">
+                      <CheckCircle2 className="w-4 h-4 text-brand-blue mr-2" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+
+                {(s.title === "Enterprise AI Integration" || s.title === "AI Chatbots" || s.title === "AI Voice Agents") && (
+                  <button 
+                    onClick={() => {
+                      if (s.videoId) {
+                        window.open(`https://www.youtube.com/watch?v=${s.videoId}`, '_blank');
+                      } else if (s.videoUrl) {
+                        window.open(s.videoUrl, '_blank');
+                      }
+                    }}
+                    className="w-full py-4 bg-brand-blue text-brand-black rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-brand-cyan transition-all glow-blue group/btn"
+                  >
+                    <Play className="w-5 h-5 fill-current" />
+                    Watch Full Demo
+                    <ExternalLink className="w-4 h-4 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
+                  </button>
+                )}
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-white">{s.title}</h3>
-              <p className="text-slate-400 mb-6 leading-relaxed">{s.description}</p>
-              <ul className="space-y-3">
-                {s.features.map((f, j) => (
-                  <li key={j} className="flex items-center text-sm text-slate-300">
-                    <CheckCircle2 className="w-4 h-4 text-brand-blue mr-2" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
             </motion.div>
           ))}
         </div>
@@ -247,12 +561,54 @@ const ServicesGrid = () => {
 };
 
 const IndustriesSection = () => {
+  const [selectedImage, setSelectedImage] = useState<{ src: string, alt: string } | null>(null);
+
   const industries = [
-    { icon: <Building2 />, name: "Real Estate Firms" },
-    { icon: <Globe />, name: "E-commerce Brands" },
-    { icon: <BarChart3 />, name: "Marketing Agencies" },
-    { icon: <Users />, name: "Coaches & Consultants" },
-    { icon: <Cpu />, name: "Enterprise Organizations" }
+    { 
+      icon: <Building2 />, 
+      name: "Real Estate Firms",
+      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Create_a_highly_202604121215.png"
+    },
+    { 
+      icon: <Globe />, 
+      name: "E-commerce Brands",
+      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Create_a_futuristic_202604121222.png"
+    },
+    { 
+      icon: <BarChart3 />, 
+      name: "Marketing Agencies",
+      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Create_a_cinematic_202604121226.png"
+    },
+    { 
+      icon: <Users />, 
+      name: "Coaches & Consultants",
+      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Create_a_warm_202604121232.png"
+    },
+    { 
+      icon: <Cpu />, 
+      name: "Enterprise Organizations",
+      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Create_a_large-scale_202604121135.png"
+    },
+    { 
+      icon: <GraduationCap />, 
+      name: "Educational Institutions & EdTech (Education Technology)",
+      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Create_a_clean,_202604130329.png"
+    },
+    { 
+      icon: <Sprout />, 
+      name: "Agriculture & Farming (incl. Agri-Tech)",
+      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Create_a_realistic_202604130312.png"
+    },
+    { 
+      icon: <Fish />, 
+      name: "Commercial Fishing & Aquaculture",
+      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Create_a_realistic_202604130337.png"
+    },
+    { 
+      icon: <Utensils />, 
+      name: "Restaurants & Food Services",
+      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Create_a_modern_202604130319.png"
+    }
   ];
 
   return (
@@ -262,17 +618,42 @@ const IndustriesSection = () => {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Industries We Serve</h2>
           <p className="text-slate-400 max-w-2xl mx-auto">Tailored AI solutions for high-growth sectors looking to automate and scale.</p>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
           {industries.map((ind, i) => (
-            <div key={i} className="p-6 rounded-2xl bg-white/5 border border-white/5 text-center hover:bg-brand-blue/5 hover:border-brand-blue/20 transition-all group">
-              <div className="w-12 h-12 mx-auto mb-4 text-slate-500 group-hover:text-brand-blue transition-colors">
-                {ind.icon}
-              </div>
+            <div 
+              key={i} 
+              className="p-6 rounded-2xl bg-white/5 border border-white/5 text-center hover:bg-brand-blue/5 hover:border-brand-blue/20 transition-all group overflow-hidden flex flex-col items-center cursor-pointer"
+              onClick={() => ind.image && setSelectedImage({ src: ind.image, alt: ind.name })}
+            >
+              {ind.image ? (
+                <div className="w-full aspect-square mb-4 rounded-xl overflow-hidden border border-white/10 relative">
+                  <img 
+                    src={ind.image} 
+                    alt={ind.name} 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-brand-blue/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <Maximize2 className="w-8 h-8 text-white" />
+                  </div>
+                </div>
+              ) : (
+                <div className="w-12 h-12 mx-auto mb-4 text-slate-500 group-hover:text-brand-blue transition-colors">
+                  {ind.icon}
+                </div>
+              )}
               <span className="text-sm font-semibold text-slate-300 group-hover:text-white">{ind.name}</span>
             </div>
           ))}
         </div>
       </div>
+
+      <ImageLightbox 
+        isOpen={!!selectedImage} 
+        src={selectedImage?.src || ''} 
+        alt={selectedImage?.alt || ''} 
+        onClose={() => setSelectedImage(null)} 
+      />
     </section>
   );
 };
@@ -433,12 +814,12 @@ const Footer = ({ setCurrentPage }: { setCurrentPage: (p: Page) => void }) => (
         <div className="col-span-1 md:col-span-2">
           <div className="flex items-center mb-6">
             <img 
-              src="https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Felix%20Logo.png" 
-              alt="Felix Tech Solutions Logo" 
-              className="h-8 w-auto mr-3 object-contain"
+              src="https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Anvil%20logo.png" 
+              alt="Anvilai LLC Logo" 
+              className="h-10 w-auto mr-3 object-contain drop-shadow-[0_0_8px_rgba(59,130,246,0.2)]"
               referrerPolicy="no-referrer"
             />
-            <span className="text-lg font-bold text-white tracking-tighter uppercase">Felix Tech Solutions</span>
+            <span className="text-lg font-extrabold text-white tracking-tighter uppercase">Anvilai LLC</span>
           </div>
           <p className="text-slate-400 max-w-sm mb-6">
             Enterprise-Ready AI Automation Agency helping U.S. businesses scale through intelligent systems and workflow optimization.
@@ -472,7 +853,7 @@ const Footer = ({ setCurrentPage }: { setCurrentPage: (p: Page) => void }) => (
         </div>
       </div>
       <div className="border-t border-white/5 pt-8 flex flex-col md:row justify-between items-center text-xs text-slate-500">
-        <p>© 2026 Felix Tech Solutions. All rights reserved.</p>
+        <p>© 2026 Anvilai LLC. All rights reserved.</p>
         <p className="mt-4 md:mt-0 italic">Built on Enterprise-Grade AI Infrastructure</p>
       </div>
     </div>
@@ -492,7 +873,7 @@ const HomePage = ({ setPage }: { setPage: (p: Page) => void }) => (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-8">Why Partner With <span className="text-gradient">Felix Tech Solutions?</span></h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-8">Why Partner With <span className="text-gradient">Anvilai LLC?</span></h2>
             <div className="space-y-8">
               {[
                 { title: "Enterprise-Ready", desc: "We build systems that scale with your business, using robust infrastructure and security protocols." },
@@ -512,9 +893,9 @@ const HomePage = ({ setPage }: { setPage: (p: Page) => void }) => (
             </div>
           </div>
           <div className="relative">
-            <div className="aspect-square rounded-3xl bg-gradient-to-br from-brand-blue/20 to-brand-cyan/20 border border-white/10 flex items-center justify-center overflow-hidden">
-              <div className="absolute inset-0 bg-[url('https://picsum.photos/seed/tech/800/800')] opacity-20 mix-blend-overlay" />
-              <Cpu className="w-32 h-32 text-brand-blue/50 animate-pulse" />
+            <div className="rounded-3xl overflow-hidden border border-white/10 shadow-2xl glow-blue">
+              <CardVideo videoId="tjbI1sgEQto" noMargin />
+              
             </div>
             {/* Floating Stats */}
             <div className="absolute -bottom-6 -left-6 p-6 rounded-2xl bg-glass border border-white/10 shadow-2xl">
@@ -562,21 +943,24 @@ const ServicesPage = () => (
             problem: "Missed leads due to slow response times and high customer service costs.",
             solution: "Intelligent bots that handle inquiries 24/7 across Web, WhatsApp, and Instagram.",
             roi: "90% reduction in response time, 40% decrease in support overhead.",
-            icon: <MessageSquare className="w-12 h-12" />
+            icon: <MessageSquare className="w-12 h-12" />,
+            image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/AI%20Chatbots%20&%20Virtual%20Assistants.png"
           },
           {
             title: "AI Voice Agents",
             problem: "Manual appointment setting and lead qualification is slow and expensive.",
             solution: "Human-like voice agents that handle inbound and outbound calls with perfect memory.",
             roi: "3x increase in qualified bookings, 24/7 coverage without hiring costs.",
-            icon: <Phone className="w-12 h-12" />
+            icon: <Phone className="w-12 h-12" />,
+            image: "https://picsum.photos/seed/voice/800/600" 
           },
           {
             title: "Workflow & CRM Automation",
             problem: "Manual repetitive tasks and inefficient follow-up systems leading to lost revenue.",
             solution: "Seamless integration of AI into your CRM to automate lead nurturing and sales processes.",
             roi: "50% increase in sales team productivity, zero missed follow-ups.",
-            icon: <Workflow className="w-12 h-12" />
+            icon: <Workflow className="w-12 h-12" />,
+            image: "https://picsum.photos/seed/workflow/800/600"
           }
         ].map((s, i) => (
           <div key={i} className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center p-8 md:p-12 rounded-[40px] bg-glass border border-white/5">
@@ -601,7 +985,7 @@ const ServicesPage = () => (
               </div>
             </div>
             <div className="aspect-video rounded-3xl bg-brand-black/50 border border-white/10 overflow-hidden">
-              <img src={`https://picsum.photos/seed/service${i}/800/600`} alt={s.title} className="w-full h-full object-cover opacity-60" referrerPolicy="no-referrer" />
+              <img src={s.image} alt={s.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
             </div>
           </div>
         ))}
@@ -669,7 +1053,7 @@ const AboutPage = () => (
           <h1 className="text-4xl md:text-6xl font-bold mb-8 tracking-tight">Positioning for the <span className="text-gradient">Future</span></h1>
           <div className="space-y-6">
             <p className="text-xl text-slate-200 leading-relaxed">
-              Felix Tech Solutions is a U.S.-focused AI Automation Agency that designs and deploys intelligent voice systems and workflow automation for modern businesses.
+              Anvilai LLC is a U.S.-focused AI Automation Agency that designs and deploys intelligent voice systems and workflow automation for modern businesses.
             </p>
             <p className="text-lg text-slate-400 leading-relaxed">
               We help organizations streamline operations, capture more opportunities, and scale efficiently through tailored AI infrastructure.
@@ -680,7 +1064,7 @@ const AboutPage = () => (
           <div className="aspect-[4/5] rounded-[40px] bg-gradient-to-br from-brand-blue/20 to-brand-cyan/20 border border-white/10 overflow-hidden glow-blue">
             <img 
               src="https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Felix%20About%20Pic.png" 
-              alt="Felix - Founder of Felix Tech Solutions" 
+              alt="Felix - Founder of Anvilai LLC" 
               className="w-full h-full object-cover" 
               referrerPolicy="no-referrer" 
             />
@@ -713,16 +1097,16 @@ const AboutPage = () => (
       {/* SECTION 3: MEET THE FOUNDER */}
       <div className="mb-32">
         <div className="max-w-3xl">
-          <h2 className="text-3xl md:text-4xl font-bold mb-8">Meet Felix — <span className="text-gradient">Founder of Felix Tech Solutions</span></h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-8">Meet Felix — <span className="text-gradient">Founder of Anvilai LLC</span></h2>
           <div className="space-y-6 text-slate-400 text-lg leading-relaxed">
             <p>
-              Felix is the founder of Felix Tech Solutions, an AI Automation Agency focused on helping U.S. businesses eliminate inefficiencies and scale through intelligent systems.
+              Felix is the founder of Anvilai LLC, an AI Automation Agency focused on helping U.S. businesses eliminate inefficiencies and scale through intelligent systems.
             </p>
             <p>
               With a strong focus on automation, AI-driven communication, and operational workflows, Felix built the company to solve a critical problem many businesses face — manual processes that slow growth and reduce efficiency.
             </p>
             <p>
-              Rather than offering generic solutions, Felix Tech Solutions is designed to create tailored AI systems that integrate directly into business operations — from lead capture and follow-up to customer support and sales automation.
+              Rather than offering generic solutions, Anvilai LLC is designed to create tailored AI systems that integrate directly into business operations — from lead capture and follow-up to customer support and sales automation.
             </p>
           </div>
         </div>
@@ -731,12 +1115,12 @@ const AboutPage = () => (
       {/* SECTION 4: THE STORY */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start mb-32">
         <div className="sticky top-32">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">The Story Behind <br/><span className="text-gradient">Felix Tech Solutions</span></h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">The Story Behind <br/><span className="text-gradient">Anvilai LLC</span></h2>
           <div className="w-20 h-1 bg-brand-blue rounded-full" />
         </div>
         <div className="space-y-8 text-slate-400 text-lg leading-relaxed">
           <p>
-            Felix Tech Solutions was founded on a clear observation: many businesses lose revenue daily due to slow response times, missed leads, and inefficient systems.
+            Anvilai LLC was founded on a clear observation: many businesses lose revenue daily due to slow response times, missed leads, and inefficient systems.
           </p>
           <p>
             While AI technology has advanced rapidly, most organizations struggle to implement it in a practical and results-driven way.
@@ -745,7 +1129,7 @@ const AboutPage = () => (
             Felix identified the gap between what AI is capable of and how businesses are actually using it.
           </p>
           <div className="p-8 rounded-3xl bg-white/5 border border-white/10">
-            <p className="text-white font-bold mb-6">Felix Tech Solutions was built to close that gap by delivering scalable AI systems that:</p>
+            <p className="text-white font-bold mb-6">Anvilai LLC was built to close that gap by delivering scalable AI systems that:</p>
             <ul className="space-y-4">
               {[
                 "Respond instantly to leads",
