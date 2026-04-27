@@ -254,7 +254,7 @@ const Hero = ({ onCtaClick }: { onCtaClick: (p: Page) => void }) => (
 );
 
 const CardVideo = ({ videoId, videoUrl, noMargin = false }: { videoId?: string, videoUrl?: string, noMargin?: boolean }) => {
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -365,7 +365,7 @@ const CardVideo = ({ videoId, videoUrl, noMargin = false }: { videoId?: string, 
     }
 
     if (videoId) {
-      const videoSrc = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&origin=${origin}&cc_load_policy=1`;
+      const videoSrc = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0&loop=1&playlist=${videoId}&controls=0&showinfo=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&origin=${origin}&cc_load_policy=1`;
       return (
         <iframe
           ref={isExpandedView ? expandedIframeRef : iframeRef}
@@ -561,7 +561,7 @@ const ServicesGrid = () => {
   );
 };
 
-const IndustriesSection = () => {
+const IndustriesSection = ({ showHeader = true }: { showHeader?: boolean }) => {
   const [selectedImage, setSelectedImage] = useState<{ src: string, alt: string } | null>(null);
 
   const industries = [
@@ -624,10 +624,12 @@ const IndustriesSection = () => {
   return (
     <section className="py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Industries We Serve</h2>
-          <p className="text-slate-400 max-w-2xl mx-auto">Tailored AI solutions for high-growth sectors looking to automate and scale.</p>
-        </div>
+        {showHeader && (
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Industries We Serve</h2>
+            <p className="text-slate-400 max-w-2xl mx-auto">Tailored AI solutions for high-growth sectors looking to automate and scale.</p>
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {industries.map((ind, i) => (
             <div 
@@ -1049,12 +1051,12 @@ const PortfolioPage = () => {
   const projects = [
     {
       id: 1,
-      title: "Omni-Channel Voice Assistant",
+      title: "Retell-Channel Voice Assistant",
       category: "AI Voice & Automation Systems",
-      categoryDesc: "End-to-end call handling and lead qualification systems.",
+      categoryDesc: "End-to-end call handling and lead qualification systems utilizing Retell AI.",
       tags: ['AI Voice & Automation Systems'],
       result: "Automated 85% of inbound lead qualification",
-      image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop"
+      videoUrl: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/n8n%20integration.mp4"
     },
     {
       id: 2,
@@ -1168,14 +1170,24 @@ const PortfolioPage = () => {
                 transition={{ duration: 0.4, ease: "easeOut" }}
                 className="group relative flex flex-col h-full bg-brand-navy/30 rounded-[32px] border border-white/5 overflow-hidden hover:border-brand-blue/30 hover:shadow-2xl hover:shadow-brand-blue/10 transition-all duration-500"
               >
-                {/* Image Wrap */}
+                {/* Media Wrap */}
                 <div className="aspect-[4/3] overflow-hidden relative">
-                  <img 
-                    src={project.image} 
-                    alt={project.title} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-100"
-                    referrerPolicy="no-referrer"
-                  />
+                  {(project as any).videoUrl ? (
+                    <video 
+                      src={(project as any).videoUrl} 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-100"
+                      autoPlay 
+                      loop 
+                      playsInline
+                    />
+                  ) : (
+                    <img 
+                      src={(project as any).image} 
+                      alt={project.title} 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-100"
+                      referrerPolicy="no-referrer"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent opacity-80" />
                   
                   {/* Category Tag */}
@@ -1215,6 +1227,52 @@ const PortfolioPage = () => {
     </motion.div>
   );
 };
+
+const IndustriesPage = () => (
+  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+    <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden min-h-[60vh] flex items-center">
+      {/* Video Background */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 bg-brand-black/60 z-10" />
+        <video
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full object-cover min-w-full min-h-full"
+          src="https://v3b.fal.media/files/b/0a97f59f/xafmDzGipRdjJPPnTC9rM_merged_video.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+      </div>
+      
+      {/* Background Glows */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none z-[5]">
+        <div className="absolute top-[10%] left-[-10%] w-[40%] h-[40%] bg-brand-blue/20 blur-[120px] rounded-full" />
+        <div className="absolute bottom-[10%] right-[-10%] w-[30%] h-[30%] bg-brand-cyan/20 blur-[100px] rounded-full" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="text-center max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <span className="inline-block px-4 py-1.5 rounded-full bg-brand-blue/10 border border-brand-blue/20 text-brand-blue text-xs font-bold uppercase tracking-widest mb-6">
+              Sector-Specific AI Systems
+            </span>
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
+              Industries <span className="text-gradient">We Transform</span>
+            </h1>
+            <p className="text-lg md:text-xl text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+              Every industry has unique challenges. We build precision-engineered AI automation that solves them at scale.
+            </p>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+    <IndustriesSection showHeader={false} />
+  </motion.div>
+);
 
 const AboutPage = () => (
   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pt-32 pb-24">
@@ -1441,7 +1499,7 @@ export default function App() {
           >
             {currentPage === 'home' && <HomePage setPage={setCurrentPage} />}
             {currentPage === 'services' && <ServicesPage />}
-            {currentPage === 'industries' && <IndustriesSection />}
+            {currentPage === 'industries' && <IndustriesPage />}
             {currentPage === 'portfolio' && <PortfolioPage />}
             {currentPage === 'about' && <AboutPage />}
             {currentPage === 'contact' && <ContactPage />}
