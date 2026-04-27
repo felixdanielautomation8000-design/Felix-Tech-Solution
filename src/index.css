@@ -8,6 +8,18 @@
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility mask-fade-right {
+  mask-image: linear-gradient(to right, black 85%, transparent 100%);
+}
+
 @layer base {
   body {
     @apply bg-brand-black text-slate-300 font-sans antialiased;

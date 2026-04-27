@@ -28,6 +28,7 @@ import {
   Pause,
   Maximize2,
   Minimize2,
+  TrendingUp,
   GraduationCap,
   Sprout,
   Fish,
@@ -1031,55 +1032,189 @@ const ServicesPage = () => (
   </motion.div>
 );
 
-const PortfolioPage = () => (
-  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pt-32 pb-24">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="mb-20">
-        <h1 className="text-4xl md:text-6xl font-bold mb-6">Case <span className="text-gradient">Studies</span></h1>
-        <p className="text-xl text-slate-400 max-w-3xl">Real results for real businesses. No fabricated testimonials, just data-driven success.</p>
-      </div>
+const PortfolioPage = () => {
+  const [filter, setFilter] = useState('All');
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {[
-          {
-            client: "Global Real Estate Group",
-            industry: "Real Estate",
-            problem: "Agents spending 4 hours/day on lead qualification.",
-            solution: "Deployed AI Voice Agents for initial lead screening and appointment booking.",
-            results: "85% of leads qualified automatically, 2.5x increase in viewing appointments."
-          },
-          {
-            client: "Luxury E-com Brand",
-            industry: "E-commerce",
-            problem: "High cart abandonment and 12-hour support response time.",
-            solution: "Integrated AI Chatbots for instant product recommendations and support.",
-            results: "22% increase in checkout conversion, support response time reduced to < 10 seconds."
-          }
-        ].map((caseStudy, i) => (
-          <div key={i} className="p-8 rounded-3xl bg-glass border border-white/5 hover:border-brand-blue/30 transition-all group">
-            <div className="aspect-video rounded-2xl bg-brand-black mb-8 overflow-hidden">
-              <img src={`https://picsum.photos/seed/case${i}/800/450`} alt={caseStudy.client} className="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-500" referrerPolicy="no-referrer" />
-            </div>
-            <div className="flex justify-between items-start mb-4">
-              <h3 className="text-2xl font-bold text-white">{caseStudy.client}</h3>
-              <span className="px-3 py-1 rounded-full bg-brand-blue/10 text-brand-blue text-xs font-bold">{caseStudy.industry}</span>
-            </div>
-            <div className="space-y-4">
-              <p className="text-sm text-slate-400"><strong className="text-slate-200">Problem:</strong> {caseStudy.problem}</p>
-              <p className="text-sm text-slate-400"><strong className="text-slate-200">Solution:</strong> {caseStudy.solution}</p>
-              <div className="pt-4 border-t border-white/5">
-                <p className="text-brand-blue font-bold flex items-center">
-                  <BarChart3 className="w-4 h-4 mr-2" />
-                  {caseStudy.results}
-                </p>
-              </div>
-            </div>
+  const filters = [
+    'All', 
+    'AI Voice & Automation Systems', 
+    'AI Chatbots & Conversational AI', 
+    'Custom Web & Mobile Applications', 
+    'High-Converting Website Design', 
+    'AI-Powered Marketing & Content Automation', 
+    'CRM & Business Process Automation', 
+    'AI Strategy & Consulting'
+  ];
+
+  const projects = [
+    {
+      id: 1,
+      title: "Omni-Channel Voice Assistant",
+      category: "AI Voice & Automation Systems",
+      categoryDesc: "End-to-end call handling and lead qualification systems.",
+      tags: ['AI Voice & Automation Systems'],
+      result: "Automated 85% of inbound lead qualification",
+      image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop"
+    },
+    {
+      id: 2,
+      title: "Intelligent CRM Bot",
+      category: "AI Chatbots & Conversational AI",
+      categoryDesc: "Multi-channel support bots with live CRM integration.",
+      tags: ['AI Chatbots & Conversational AI', 'CRM & Business Process Automation'],
+      result: "Reduced support ticket volume by 60%",
+      image: "https://images.unsplash.com/photo-1531746790731-6c087fecd05a?q=80&w=2010&auto=format&fit=crop"
+    },
+    {
+      id: 3,
+      title: "Operations Command Center",
+      category: "Custom Web & Mobile Applications",
+      categoryDesc: "Scalable SaaS dashboards and internal business tools.",
+      tags: ['Custom Web & Mobile Applications'],
+      result: "Unified data across 12 distributed departments",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop"
+    },
+    {
+      id: 4,
+      title: "Enterprise Booking System",
+      category: "High-Converting Website Design",
+      categoryDesc: "UX-focused landing pages and appointment funnels.",
+      tags: ['High-Converting Website Design'],
+      result: "Increased consultation bookings by 42%",
+      image: "https://images.unsplash.com/photo-1551288049-bbbda536ad0a?q=80&w=2070&auto=format&fit=crop"
+    },
+    {
+      id: 5,
+      title: "AI Video Content Engine",
+      category: "AI-Powered Marketing & Content Automation",
+      categoryDesc: "Automated social posting and video generation pipelines.",
+      tags: ['AI-Powered Marketing & Content Automation'],
+      result: "Generated 30 days of content in 4 hours",
+      image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1974&auto=format&fit=crop"
+    },
+    {
+      id: 6,
+      title: "HubSpot Workflow Engine",
+      category: "CRM & Business Process Automation",
+      categoryDesc: "Complex backend logic for automated lead management.",
+      tags: ['CRM & Business Process Automation'],
+      result: "Saved 20+ hours/week in manual data entry",
+      image: "https://images.unsplash.com/photo-1454165833767-131e84a1a005?q=80&w=2070&auto=format&fit=crop"
+    },
+    {
+      id: 7,
+      title: "Corporate AI Roadmap",
+      category: "AI Strategy & Consulting",
+      categoryDesc: "Full-scale implementation strategy for legacy businesses.",
+      tags: ['AI Strategy & Consulting'],
+      result: "Defined 3-year AI roadmap for Fortune 500 client",
+      image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop"
+    },
+    {
+      id: 8,
+      title: "Lead Intelligence Pipeline",
+      category: "Data Intelligence",
+      categoryDesc: "Scraping and enrichment systems for high-volume sales teams.",
+      tags: ['AI-Powered Marketing & Content Automation', 'CRM & Business Process Automation'],
+      result: "Provided 5,000+ enriched b2b leads monthly",
+      image: "https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=2070&auto=format&fit=crop"
+    }
+  ];
+
+  const filteredProjects = filter === 'All' 
+    ? projects 
+    : projects.filter(p => p.tags.includes(filter));
+
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pt-32 pb-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mb-16">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 italic tracking-tight">System <span className="text-gradient">Portfolio</span></h1>
+          <p className="text-xl text-slate-400 max-w-3xl leading-relaxed">
+            “A collection of systems built to solve real business problems using AI and automation.”
+          </p>
+        </div>
+
+        {/* Filter Bar */}
+        <div className="mb-12 relative">
+          <div className="flex overflow-x-auto pb-4 gap-3 no-scrollbar scroll-smooth mask-fade-right">
+            {filters.map((f) => (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                className={`flex-shrink-0 px-6 py-3 rounded-full text-sm font-bold transition-all duration-300 border ${
+                  filter === f 
+                  ? 'bg-brand-blue text-brand-black border-brand-blue shadow-[0_0_20px_rgba(0,183,255,0.4)]' 
+                  : 'bg-white/5 text-slate-400 border-white/5 hover:border-brand-blue/30 hover:text-white hover:shadow-[0_0_15px_rgba(0,183,255,0.1)]'
+                }`}
+              >
+                {f}
+              </button>
+            ))}
           </div>
-        ))}
+        </div>
+
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <AnimatePresence mode="popLayout">
+            {filteredProjects.map((project) => (
+              <motion.div
+                layout
+                key={project.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="group relative flex flex-col h-full bg-brand-navy/30 rounded-[32px] border border-white/5 overflow-hidden hover:border-brand-blue/30 hover:shadow-2xl hover:shadow-brand-blue/10 transition-all duration-500"
+              >
+                {/* Image Wrap */}
+                <div className="aspect-[4/3] overflow-hidden relative">
+                  <img 
+                    src={project.image} 
+                    alt={project.title} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-100"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent opacity-80" />
+                  
+                  {/* Category Tag */}
+                  <div className="absolute top-6 left-6">
+                    <span className="px-3 py-1 bg-brand-black/60 backdrop-blur-md text-brand-blue text-[10px] font-black uppercase tracking-tighter rounded-md border border-brand-blue/20">
+                      {project.category}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-8 flex flex-col flex-grow">
+                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-brand-blue transition-colors leading-tight">
+                    {project.title}
+                  </h3>
+                  
+                  <p className="text-sm text-slate-400 mb-6 flex-grow leading-relaxed line-clamp-2">
+                    {project.categoryDesc}
+                  </p>
+
+                  <div className="pt-6 border-t border-white/5 mt-auto">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-brand-blue/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <TrendingUp className="w-4 h-4 text-brand-blue" />
+                      </div>
+                      <p className="text-sm font-bold text-white italic group-hover:text-brand-blue transition-colors">
+                        {project.result}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
       </div>
-    </div>
-  </motion.div>
-);
+    </motion.div>
+  );
+};
 
 const AboutPage = () => (
   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pt-32 pb-24">
