@@ -5,6 +5,7 @@ import {
   Mic, 
   Workflow, 
   Cpu, 
+  ChevronLeft,
   ChevronRight, 
   CheckCircle2, 
   MessageSquare, 
@@ -40,7 +41,7 @@ import { motion, AnimatePresence } from 'motion/react';
 const BOOKING_URL = "https://calendar.app.google/tJyftT7GPccWr12m9";
 
 // --- Types ---
-type Page = 'home' | 'services' | 'industries' | 'portfolio' | 'about' | 'contact';
+type Page = 'home' | 'services' | 'industries' | 'portfolio' | 'about' | 'contact' | 'faq';
 
 interface Service {
   title: string;
@@ -100,6 +101,7 @@ const Navbar = ({ currentPage, setCurrentPage }: { currentPage: Page, setCurrent
     { label: 'Industries', value: 'industries' },
     { label: 'Portfolio', value: 'portfolio' },
     { label: 'About', value: 'about' },
+    { label: 'FAQ', value: 'faq' },
     { label: 'Contact', value: 'contact' },
   ];
 
@@ -257,6 +259,8 @@ const CardVideo = ({ videoId, videoUrl, noMargin = false }: { videoId?: string, 
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const expandedIframeRef = useRef<HTMLIFrameElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -354,6 +358,39 @@ const CardVideo = ({ videoId, videoUrl, noMargin = false }: { videoId?: string, 
     setIsPlaying(true); // Always play when switching/expanding
   };
 
+  const handleTimeUpdate = (e: React.SyntheticEvent<HTMLVideoElement>) => {
+    setCurrentTime(e.currentTarget.currentTime);
+    setDuration(e.currentTarget.duration);
+  };
+
+  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const clickedPercentage = x / rect.width;
+    
+    const activeVideo = isExpanded ? expandedVideoRef.current : videoRef.current;
+    if (activeVideo && activeVideo.duration) {
+      activeVideo.currentTime = clickedPercentage * activeVideo.duration;
+    }
+  };
+
+  const progressPercentage = duration > 0 ? (currentTime / duration) * 100 : 0;
+
+  const ProgressBar = ({ className = "" }: { className?: string }) => (
+    <div 
+      className={`absolute bottom-0 left-0 w-full h-1 bg-white/10 z-30 cursor-pointer group/progress overflow-hidden ${className}`}
+      onClick={handleSeek}
+    >
+      <div 
+        className="h-full bg-brand-blue relative transition-all duration-100 ease-linear shadow-[0_0_15px_rgba(0,184,255,0.8)]"
+        style={{ width: `${progressPercentage}%` }}
+      >
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full opacity-0 group-hover/progress:opacity-100 shadow-xl" />
+      </div>
+    </div>
+  );
+
   const renderVideo = (isExpandedView: boolean) => {
     // If we are in expanded view, don't render the background one to avoid conflicts
     if (isExpanded && !isExpandedView) {
@@ -385,6 +422,8 @@ const CardVideo = ({ videoId, videoUrl, noMargin = false }: { videoId?: string, 
           className="absolute inset-0 w-full h-full object-cover"
           autoPlay
           muted={isMuted}
+          onTimeUpdate={handleTimeUpdate}
+          onDurationChange={handleTimeUpdate}
           loop
           playsInline
           aria-label="Service Demonstration Video"
@@ -397,31 +436,44 @@ const CardVideo = ({ videoId, videoUrl, noMargin = false }: { videoId?: string, 
   return (
     <>
       <div className={`relative w-full aspect-video rounded-2xl overflow-hidden ${noMargin ? '' : 'mb-6'} group border border-white/5 shadow-2xl`}>
-        <div className="absolute inset-0 bg-brand-black/20 z-10 pointer-events-none" />
+        <div className="absolute inset-0 bg-brand-black/20 z-10 pointer-events-none transition-colors group-hover:bg-brand-black/5" />
         {renderVideo(false)}
-        <div className="absolute bottom-3 right-3 z-20 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="absolute bottom-4 right-4 z-20 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <button 
             type="button"
             onClick={togglePlay}
-            className="p-2 bg-brand-black/60 backdrop-blur-md rounded-xl text-white hover:bg-brand-blue transition-all border border-white/10 shadow-lg"
+            className="p-2.5 bg-brand-black/60 backdrop-blur-md rounded-xl text-white hover:bg-brand-blue transition-all border border-white/10 shadow-lg glow-blue group/btn"
           >
-            {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+            {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
           </button>
           <button 
             type="button"
             onClick={toggleMute}
-            className="p-2 bg-brand-black/60 backdrop-blur-md rounded-xl text-white hover:bg-brand-blue transition-all border border-white/10 shadow-lg"
+            className="p-2.5 bg-brand-black/60 backdrop-blur-md rounded-xl text-white hover:bg-brand-blue transition-all border border-white/10 shadow-lg glow-blue group/btn"
           >
-            {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+            {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
           </button>
           <button 
             type="button"
             onClick={toggleExpand}
-            className="p-2 bg-brand-black/60 backdrop-blur-md rounded-xl text-white hover:bg-brand-blue transition-all border border-white/10 shadow-lg"
+            className="p-2.5 bg-brand-black/60 backdrop-blur-md rounded-xl text-white hover:bg-brand-blue transition-all border border-white/10 shadow-lg glow-blue group/btn"
           >
-            <Maximize2 className="w-4 h-4" />
+            <Maximize2 className="w-5 h-5" />
           </button>
         </div>
+        <ProgressBar className="opacity-0 group-hover:opacity-100 transition-opacity" />
+
+        {/* Central Play Button Overlay */}
+        {!isPlaying && (
+          <div 
+            className="absolute inset-0 z-15 flex items-center justify-center bg-black/20 cursor-pointer group/center"
+            onClick={togglePlay}
+          >
+            <div className="w-20 h-20 bg-brand-blue/30 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20 group-hover/center:scale-110 transition-transform">
+              <Play className="w-10 h-10 text-white fill-current ml-1" />
+            </div>
+          </div>
+        )}
       </div>
 
       <AnimatePresence>
@@ -465,6 +517,13 @@ const CardVideo = ({ videoId, videoUrl, noMargin = false }: { videoId?: string, 
                   {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
                   {isMuted ? 'Unmute' : 'Mute'}
                 </button>
+                <div className="flex-1 max-w-sm px-6">
+                  <div className="flex justify-between text-[10px] text-white/50 mb-1 font-mono uppercase tracking-widest">
+                    <span>{Math.floor(currentTime)}s</span>
+                    <span>{Math.floor(duration)}s</span>
+                  </div>
+                  <ProgressBar className="relative h-1.5 rounded-full" />
+                </div>
               </div>
             </motion.div>
           </motion.div>,
@@ -984,6 +1043,7 @@ const ServicesPage = () => (
             solution: "Intelligent bots that handle inquiries 24/7 across Web, WhatsApp, and Instagram.",
             roi: "90% reduction in response time, 40% decrease in support overhead.",
             icon: <MessageSquare className="w-12 h-12" />,
+            videoId: "cg1IO3Opk28",
             image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/AI%20Chatbots%20&%20Virtual%20Assistants.png"
           },
           {
@@ -992,6 +1052,7 @@ const ServicesPage = () => (
             solution: "Human-like voice agents that handle inbound and outbound calls with perfect memory.",
             roi: "3x increase in qualified bookings, 24/7 coverage without hiring costs.",
             icon: <Phone className="w-12 h-12" />,
+            videoId: "omSHRkIIPwM",
             image: "https://picsum.photos/seed/voice/800/600" 
           },
           {
@@ -1000,6 +1061,7 @@ const ServicesPage = () => (
             solution: "Seamless integration of AI into your CRM to automate lead nurturing and sales processes.",
             roi: "50% increase in sales team productivity, zero missed follow-ups.",
             icon: <Workflow className="w-12 h-12" />,
+            videoUrl: "https://v3b.fal.media/files/b/0a95f170/-bUStROaB4R5y19RmvVMs_merged_video.mp4",
             image: "https://picsum.photos/seed/workflow/800/600"
           }
         ].map((s, i) => (
@@ -1018,14 +1080,39 @@ const ServicesPage = () => (
                   <h4 className="text-brand-blue text-xs font-bold uppercase tracking-widest mb-2">The AI Solution</h4>
                   <p className="text-slate-300">{s.solution}</p>
                 </div>
-                <div className="p-4 rounded-xl bg-brand-blue/5 border border-brand-blue/20">
+                <div className="p-4 rounded-xl bg-brand-blue/5 border border-brand-blue/20 mb-8">
                   <h4 className="text-brand-blue text-xs font-bold uppercase tracking-widest mb-2">Expected ROI Value</h4>
                   <p className="text-white font-semibold">{s.roi}</p>
                 </div>
+                
+                {(s.videoId || s.videoUrl) && (
+                  <button 
+                    onClick={() => {
+                      if (s.videoId) {
+                        window.open(`https://www.youtube.com/watch?v=${s.videoId}`, '_blank');
+                      } else if (s.videoUrl) {
+                        window.open(s.videoUrl, '_blank');
+                      }
+                    }}
+                    className="w-full py-4 bg-brand-blue text-brand-black rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-brand-cyan transition-all glow-blue group/btn"
+                  >
+                    <Play className="w-5 h-5 fill-current" />
+                    Watch Full Demo
+                    <ExternalLink className="w-4 h-4 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
+                  </button>
+                )}
               </div>
             </div>
-            <div className="aspect-video rounded-3xl bg-brand-black/50 border border-white/10 overflow-hidden">
-              <img src={s.image} alt={s.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+            <div className="relative group/video">
+              <div className="aspect-video rounded-3xl bg-brand-black/50 border border-white/10 overflow-hidden shadow-2xl relative">
+                {s.videoId || s.videoUrl ? (
+                  <CardVideo videoId={s.videoId} videoUrl={s.videoUrl} noMargin />
+                ) : (
+                  <img src={s.image} alt={s.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                )}
+              </div>
+              {/* Optional Decoration */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-brand-blue/20 to-brand-cyan/20 rounded-[35px] blur-xl opacity-0 group-hover/video:opacity-100 transition-opacity pointer-events-none -z-10" />
             </div>
           </div>
         ))}
@@ -1036,6 +1123,17 @@ const ServicesPage = () => (
 
 const PortfolioPage = () => {
   const [filter, setFilter] = useState('All');
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 300;
+      scrollContainerRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   const filters = [
     'All', 
@@ -1051,6 +1149,15 @@ const PortfolioPage = () => {
   const projects = [
     {
       id: 1,
+      title: "Vapi Appointment Booking Bot in GoHighLevel",
+      category: "AI Voice & Automation Systems",
+      categoryDesc: "Dynamic AI calling agent that instantly calls Facebook leads, mentions prospect names and numbers, and handles inbound/outbound booking via Retell/Vapi.",
+      tags: ['AI Voice & Automation Systems'],
+      result: "Instant dynamic lead follow-up & 24/7 handle on inbound calls",
+      videoUrl: "https://www.dropbox.com/scl/fi/yf0xxs14tdnbjoromu9gn/Vapi-Dashboard.mp4?rlkey=hgzy81mhmqc7u0e47jxruenc4&st=6lep05s0&raw=1"
+    },
+    {
+      id: 2,
       title: "Retell-Channel Voice Assistant",
       category: "AI Voice & Automation Systems",
       categoryDesc: "End-to-end call handling and lead qualification systems utilizing Retell AI.",
@@ -1059,16 +1166,16 @@ const PortfolioPage = () => {
       videoUrl: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/n8n%20integration.mp4"
     },
     {
-      id: 2,
+      id: 3,
       title: "Intelligent CRM Bot",
       category: "AI Chatbots & Conversational AI",
       categoryDesc: "Multi-channel support bots with live CRM integration.",
       tags: ['AI Chatbots & Conversational AI', 'CRM & Business Process Automation'],
       result: "Reduced support ticket volume by 60%",
-      image: "https://images.unsplash.com/photo-1531746790731-6c087fecd05a?q=80&w=2010&auto=format&fit=crop"
+      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/AI%20Chatbots%20&%20Virtual%20Assistants.png"
     },
     {
-      id: 3,
+      id: 4,
       title: "Operations Command Center",
       category: "Custom Web & Mobile Applications",
       categoryDesc: "Scalable SaaS dashboards and internal business tools.",
@@ -1077,7 +1184,7 @@ const PortfolioPage = () => {
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop"
     },
     {
-      id: 4,
+      id: 5,
       title: "Enterprise Booking System",
       category: "High-Converting Website Design",
       categoryDesc: "UX-focused landing pages and appointment funnels.",
@@ -1086,7 +1193,7 @@ const PortfolioPage = () => {
       image: "https://images.unsplash.com/photo-1551288049-bbbda536ad0a?q=80&w=2070&auto=format&fit=crop"
     },
     {
-      id: 5,
+      id: 6,
       title: "AI Video Content Engine",
       category: "AI-Powered Marketing & Content Automation",
       categoryDesc: "Automated social posting and video generation pipelines.",
@@ -1095,7 +1202,7 @@ const PortfolioPage = () => {
       image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1974&auto=format&fit=crop"
     },
     {
-      id: 6,
+      id: 7,
       title: "HubSpot Workflow Engine",
       category: "CRM & Business Process Automation",
       categoryDesc: "Complex backend logic for automated lead management.",
@@ -1104,7 +1211,7 @@ const PortfolioPage = () => {
       image: "https://images.unsplash.com/photo-1454165833767-131e84a1a005?q=80&w=2070&auto=format&fit=crop"
     },
     {
-      id: 7,
+      id: 8,
       title: "Corporate AI Roadmap",
       category: "AI Strategy & Consulting",
       categoryDesc: "Full-scale implementation strategy for legacy businesses.",
@@ -1113,7 +1220,7 @@ const PortfolioPage = () => {
       image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop"
     },
     {
-      id: 8,
+      id: 9,
       title: "Lead Intelligence Pipeline",
       category: "Data Intelligence",
       categoryDesc: "Scraping and enrichment systems for high-volume sales teams.",
@@ -1139,8 +1246,21 @@ const PortfolioPage = () => {
         </div>
 
         {/* Filter Bar */}
-        <div className="mb-12 relative">
-          <div className="flex overflow-x-auto pb-4 gap-3 no-scrollbar scroll-smooth mask-fade-right">
+        <div className="mb-12 relative group/filters">
+          {/* Left Arrow */}
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 z-20 pointer-events-none transition-opacity">
+            <button 
+              onClick={() => scroll('left')}
+              className="pointer-events-auto p-2 bg-brand-black/60 backdrop-blur-md rounded-full border border-white/10 text-white hover:bg-brand-blue hover:border-brand-blue transition-all"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div 
+            ref={scrollContainerRef}
+            className="flex overflow-x-auto pb-4 gap-3 no-scrollbar scroll-smooth mask-fade-right"
+          >
             {filters.map((f) => (
               <button
                 key={f}
@@ -1154,6 +1274,16 @@ const PortfolioPage = () => {
                 {f}
               </button>
             ))}
+          </div>
+
+          {/* Right Arrow */}
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 z-20 pointer-events-none transition-opacity">
+            <button 
+              onClick={() => scroll('right')}
+              className="pointer-events-auto p-2 bg-brand-black/60 backdrop-blur-md rounded-full border border-white/10 text-white hover:bg-brand-blue hover:border-brand-blue transition-all"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
           </div>
         </div>
 
@@ -1173,22 +1303,18 @@ const PortfolioPage = () => {
                 {/* Media Wrap */}
                 <div className="aspect-[4/3] overflow-hidden relative">
                   {(project as any).videoUrl ? (
-                    <video 
-                      src={(project as any).videoUrl} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-100"
-                      autoPlay 
-                      loop 
-                      playsInline
-                    />
+                    <CardVideo videoUrl={(project as any).videoUrl} noMargin />
                   ) : (
-                    <img 
-                      src={(project as any).image} 
-                      alt={project.title} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-100"
-                      referrerPolicy="no-referrer"
-                    />
+                    <>
+                      <img 
+                        src={(project as any).image} 
+                        alt={project.title} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-100"
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent opacity-80" />
+                    </>
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent opacity-80" />
                   
                   {/* Category Tag */}
                   <div className="absolute top-6 left-6">
@@ -1271,6 +1397,132 @@ const IndustriesPage = () => (
       </div>
     </section>
     <IndustriesSection showHeader={false} />
+  </motion.div>
+);
+
+const FAQSection = () => {
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  const faqs = [
+    {
+      question: "What exactly is AI Automation and how can it benefit my business?",
+      answer: "AI Automation involves using artificial intelligence (like LLMs and Voice AI) to perform repetitive business tasks. This includes answering inquiries via chat or voice, qualifying leads, and syncing data across your CRM. For your business, this means 24/7 operation without increased headcount, faster response times, and higher conversion rates."
+    },
+    {
+      question: "Will the AI voice agents sound like real humans?",
+      answer: "Yes. We utilize advanced voice synthesis technology (like Retell AI) that sounds natural and can maintain fluid, human-like conversations. They can handle interruptions, understand context, and even project specific brand personalities."
+    },
+    {
+      question: "How long does it typically take to implement an AI system?",
+      answer: "A standard implementation (like an AI Chatbot or Lead Qualification Voice Agent) typically takes 2-4 weeks. More complex enterprise integrations or end-to-end workflow automations can take 6-10 weeks depending on the scope and complexity of your existing systems."
+    },
+    {
+      question: "Do I need to replace my existing CRM or software?",
+      answer: "Not at all. Our philosophy is 'Integration over Replacement'. We specialize in connecting AI systems to your existing tools (HubSpot, Salesforce, GoHighLevel, Shopify, etc.) using APIs and automation platforms like n8n or Zapier to enhance your current workflows."
+    },
+    {
+      question: "How does the pricing work for AI solutions?",
+      answer: "We offer tailored pricing based on the complexity of the build and the volume of automation. Usually, there is a one-time setup and development fee, followed by a monthly support and infrastructure maintenance fee. Most clients see a full ROI within the first 3-6 months."
+    },
+    {
+      question: "What kind of support do you provide after the system is live?",
+      answer: "Every system we build includes a dedicated support period. We monitor performance, optimize response flows based on real-world data, and ensure your AI continues to scale as your business grows. We offer monthly maintenance packages for ongoing optimization."
+    }
+  ];
+
+  return (
+    <section className="py-24 bg-brand-navy/20">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Frequently Asked <span className="text-gradient">Questions</span></h2>
+          <p className="text-slate-400">Everything you need to know about implementing AI in your business.</p>
+        </div>
+        <div className="space-y-4">
+          {faqs.map((faq, i) => (
+            <div 
+              key={i}
+              className="rounded-2xl border border-white/5 bg-white/5 overflow-hidden transition-all duration-300 hover:border-brand-blue/30"
+            >
+              <button
+                onClick={() => setOpenIndex(openIndex === i ? null : i)}
+                className="w-full px-6 py-6 flex items-center justify-between text-left group"
+              >
+                <span className="text-lg font-bold text-white group-hover:text-brand-blue transition-colors">
+                  {faq.question}
+                </span>
+                <motion.div
+                  animate={{ rotate: openIndex === i ? 180 : 0 }}
+                  className="text-slate-400 group-hover:text-brand-blue transition-colors"
+                >
+                  <ChevronRight className="w-5 h-5 rotate-90" />
+                </motion.div>
+              </button>
+              <AnimatePresence>
+                {openIndex === i && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="px-6 pb-6 text-slate-400 leading-relaxed border-t border-white/5 pt-4">
+                      {faq.answer}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const FAQPage = () => (
+  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+    <section className="pt-32 pb-12 lg:pt-48 lg:pb-20 bg-brand-navy/10 relative overflow-hidden">
+      <div className="absolute inset-0 z-0 opacity-20">
+        <div className="absolute top-[10%] left-[-10%] w-[40%] h-[40%] bg-brand-blue/30 blur-[120px] rounded-full" />
+        <div className="absolute bottom-[10%] right-[-10%] w-[30%] h-[30%] bg-brand-cyan/30 blur-[100px] rounded-full" />
+      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        <span className="inline-block px-4 py-1.5 rounded-full bg-brand-blue/10 border border-brand-blue/20 text-brand-blue text-xs font-bold uppercase tracking-widest mb-6">
+          Support & Resources
+        </span>
+        <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
+          Common <span className="text-gradient">Questions</span>
+        </h1>
+        <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          Find answers to the most common questions about our AI automation solutions and how they can scale your business.
+        </p>
+      </div>
+    </section>
+    <FAQSection />
+    <section className="py-20 bg-brand-black">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="p-12 rounded-[40px] bg-gradient-to-br from-brand-blue/10 to-brand-cyan/10 border border-brand-blue/20 text-center">
+          <h3 className="text-3xl font-bold text-white mb-6">Still have questions?</h3>
+          <p className="text-slate-400 mb-8 max-w-xl mx-auto">
+            Our team is here to help you navigate the world of AI automation. Reach out for a free discovery call.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a 
+              href={BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-8 py-4 bg-brand-blue text-brand-black rounded-xl font-bold hover:bg-brand-cyan transition-all glow-blue flex items-center gap-2"
+            >
+              <Calendar className="w-5 h-5" />
+              Book Discovery Call
+            </a>
+            <button className="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-xl font-bold hover:bg-white/10 transition-all">
+              Contact Support
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
   </motion.div>
 );
 
@@ -1403,6 +1655,7 @@ const AboutPage = () => (
         </p>
       </div>
     </div>
+    <FAQSection />
   </motion.div>
 );
 
@@ -1472,6 +1725,9 @@ const ContactPage = () => (
         </div>
       </div>
     </div>
+    <div className="mt-24">
+      <FAQSection />
+    </div>
   </motion.div>
 );
 
@@ -1502,6 +1758,7 @@ export default function App() {
             {currentPage === 'industries' && <IndustriesPage />}
             {currentPage === 'portfolio' && <PortfolioPage />}
             {currentPage === 'about' && <AboutPage />}
+            {currentPage === 'faq' && <FAQPage />}
             {currentPage === 'contact' && <ContactPage />}
           </motion.div>
         </AnimatePresence>
