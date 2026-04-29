@@ -1149,6 +1149,15 @@ const PortfolioPage = () => {
   const projects = [
     {
       id: 1,
+      title: "Botcircuits - AI Agents for Customer Support",
+      category: "AI Chatbots & Conversational AI",
+      categoryDesc: "LLM-native SaaS platform using intelligent state machines to build reliable AI agents. Ensures structured conversational flows for enterprise support and sales.",
+      tags: ['AI Chatbots & Conversational AI'],
+      result: "Achieved seamless balance between LLM flexibility and operational control",
+      image: "https://cortex-storage.googleapis.com/artifact/09177ed2-6a6d-4767-8cfb-6101f3ac2278.png"
+    },
+    {
+      id: 2,
       title: "Ai voice agent | Bubble.io App",
       category: "AI Voice & Automation Systems",
       categoryDesc: "Complete rescue and optimization of a Bubble.io application. Enhanced with OpenAI-driven features, UI/UX overhauls, and backend workflow automation.",
@@ -1157,7 +1166,7 @@ const PortfolioPage = () => {
       videoUrl: "https://www.dropbox.com/scl/fi/iubfgyb7cppo7y7efjpch/ContractorPost-1.AI?rlkey=ypdelpk56nfraoch5qgrawspz&st=9jj6z3pm&raw=1"
     },
     {
-      id: 2,
+      id: 3,
       title: "AI Voice Agent for Dick Watts Insurance",
       category: "AI Voice & Automation Systems",
       categoryDesc: "Advanced 3-agent insurance handling system built with Retell AI. Consolidates quotes, claims, and scheduling into a zero-latency call flow with Twilio and SendGrid automation.",
@@ -1166,7 +1175,7 @@ const PortfolioPage = () => {
       videoUrl: "https://www.dropbox.com/scl/fi/y1lbm1vcai8wivzmaf4px/AI-Voice-Agent-for-Dick-Watts-Insurance-Calendly-Vercel-Retell.mp4?rlkey=ab4siutfomd39n09h0ardp106&st=xbdle04n&raw=1"
     },
     {
-      id: 3,
+      id: 4,
       title: "Vapi Appointment Booking Bot in GoHighLevel",
       category: "AI Voice & Automation Systems",
       categoryDesc: "Dynamic AI calling agent that instantly calls Facebook leads, mentions prospect names and numbers, and handles inbound/outbound booking via Retell/Vapi.",
@@ -1175,7 +1184,7 @@ const PortfolioPage = () => {
       videoUrl: "https://www.dropbox.com/scl/fi/yf0xxs14tdnbjoromu9gn/Vapi-Dashboard.mp4?rlkey=hgzy81mhmqc7u0e47jxruenc4&st=6lep05s0&raw=1"
     },
     {
-      id: 4,
+      id: 5,
       title: "Retell-Channel Voice Assistant",
       category: "AI Voice & Automation Systems",
       categoryDesc: "End-to-end call handling and lead qualification systems utilizing Retell AI.",
@@ -1184,7 +1193,7 @@ const PortfolioPage = () => {
       videoUrl: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/n8n%20integration.mp4"
     },
     {
-      id: 5,
+      id: 6,
       title: "Intelligent CRM Bot",
       category: "AI Chatbots & Conversational AI",
       categoryDesc: "Multi-channel support bots with live CRM integration.",
@@ -1193,7 +1202,7 @@ const PortfolioPage = () => {
       image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/AI%20Chatbots%20&%20Virtual%20Assistants.png"
     },
     {
-      id: 6,
+      id: 7,
       title: "Operations Command Center",
       category: "Custom Web & Mobile Applications",
       categoryDesc: "Scalable SaaS dashboards and internal business tools.",
@@ -1202,7 +1211,7 @@ const PortfolioPage = () => {
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop"
     },
     {
-      id: 7,
+      id: 8,
       title: "Enterprise Booking System",
       category: "High-Converting Website Design",
       categoryDesc: "UX-focused landing pages and appointment funnels.",
@@ -1211,7 +1220,7 @@ const PortfolioPage = () => {
       image: "https://images.unsplash.com/photo-1551288049-bbbda536ad0a?q=80&w=2070&auto=format&fit=crop"
     },
     {
-      id: 8,
+      id: 9,
       title: "AI Video Content Engine",
       category: "AI-Powered Marketing & Content Automation",
       categoryDesc: "Automated social posting and video generation pipelines.",
@@ -1220,7 +1229,7 @@ const PortfolioPage = () => {
       image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1974&auto=format&fit=crop"
     },
     {
-      id: 9,
+      id: 10,
       title: "HubSpot Workflow Engine",
       category: "CRM & Business Process Automation",
       categoryDesc: "Complex backend logic for automated lead management.",
@@ -1229,7 +1238,7 @@ const PortfolioPage = () => {
       image: "https://images.unsplash.com/photo-1454165833767-131e84a1a005?q=80&w=2070&auto=format&fit=crop"
     },
     {
-      id: 10,
+      id: 11,
       title: "Corporate AI Roadmap",
       category: "AI Strategy & Consulting",
       categoryDesc: "Full-scale implementation strategy for legacy businesses.",
@@ -1238,7 +1247,7 @@ const PortfolioPage = () => {
       image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop"
     },
     {
-      id: 11,
+      id: 12,
       title: "Lead Intelligence Pipeline",
       category: "Data Intelligence",
       categoryDesc: "Scraping and enrichment systems for high-volume sales teams.",
