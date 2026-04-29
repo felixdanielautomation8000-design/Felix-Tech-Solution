@@ -1121,6 +1121,89 @@ const ServicesPage = () => (
   </motion.div>
 );
 
+const ProjectMedia = ({ project }: { project: any }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  
+  const mediaItems = [];
+  if (project.videoUrl) mediaItems.push({ type: 'video', url: project.videoUrl });
+  if (project.images) {
+    project.images.forEach((url: string) => mediaItems.push({ type: 'image', url }));
+  } else if (project.image) {
+    mediaItems.push({ type: 'image', url: project.image });
+  }
+
+  const hasMultipleItems = mediaItems.length > 1;
+
+  if (mediaItems.length === 0) return null;
+
+  const currentMedia = mediaItems[currentIndex];
+
+  return (
+    <div className="relative w-full h-full group/media">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentIndex}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          className="w-full h-full"
+        >
+          {currentMedia.type === 'video' ? (
+            <CardVideo videoUrl={currentMedia.url} noMargin />
+          ) : (
+            <img
+              src={currentMedia.url}
+              alt={`${project.title} - media ${currentIndex + 1}`}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-100"
+              referrerPolicy="no-referrer"
+            />
+          )}
+        </motion.div>
+      </AnimatePresence>
+      
+      {currentMedia.type === 'image' && (
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent opacity-80 pointer-events-none" />
+      )}
+      
+      {hasMultipleItems && (
+        <>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setCurrentIndex((prev) => (prev === 0 ? mediaItems.length - 1 : prev - 1));
+            }}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-2 bg-brand-black/40 backdrop-blur-md rounded-full text-white opacity-0 group-hover/media:opacity-100 transition-opacity hover:bg-brand-blue border border-white/10"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setCurrentIndex((prev) => (prev === mediaItems.length - 1 ? 0 : prev + 1));
+            }}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-2 bg-brand-black/40 backdrop-blur-md rounded-full text-white opacity-0 group-hover/media:opacity-100 transition-opacity hover:bg-brand-blue border border-white/10"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex gap-1.5">
+            {mediaItems.map((_: any, idx: number) => (
+              <div
+                key={idx}
+                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                  idx === currentIndex ? 'bg-brand-blue w-4' : 'bg-white/30'
+                }`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
 const PortfolioPage = () => {
   const [filter, setFilter] = useState('All');
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -1149,15 +1232,53 @@ const PortfolioPage = () => {
   const projects = [
     {
       id: 1,
+      title: "Real Estate Management Mobile App",
+      category: "Custom Web & Mobile Applications",
+      categoryDesc: "User-friendly rental property management platform featuring personalized search, listing management, and integrated viewing schedules.",
+      tags: ['Custom Web & Mobile Applications'],
+      result: "Streamlined the rental process through personalized property matching and automated scheduling.",
+      videoUrl: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/24ed6738-f1ac-4479-b73d-c4b6bc2f5437.mp4",
+      images: [
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Real%20estate.png"
+      ]
+    },
+    {
+      id: 2,
+      title: "Pro Hair Cutz Mobile App",
+      category: "Custom Web & Mobile Applications",
+      categoryDesc: "Comprehensive hairstyling service platform featuring appointment booking, service catalogs, and wallet management for a seamless client experience.",
+      tags: ['Custom Web & Mobile Applications'],
+      result: "Elevated salon accessibility and streamlined booking workflows",
+      videoUrl: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/e52bf7c4-8e34-46b0-b5a2-f73cc7a6fa58.mp4",
+      images: [
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Pro%20hair.png"
+      ]
+    },
+    {
+      id: 3,
+      title: "Food Scan AI Mobile App",
+      category: "Custom Web & Mobile Applications",
+      categoryDesc: "Advanced nutrition and exercise tracking app powered by food recognition AI. Identifies meals from photos to provide instant nutritional insights and personalized health scores.",
+      tags: ['Custom Web & Mobile Applications'],
+      result: "AI-powered automated nutrition tracking for healthier habits",
+      images: [
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Food1.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Food2.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Food3.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Food4.png"
+      ]
+    },
+    {
+      id: 4,
       title: "Botcircuits - AI Agents for Customer Support",
       category: "AI Chatbots & Conversational AI",
       categoryDesc: "LLM-native SaaS platform using intelligent state machines to build reliable AI agents. Ensures structured conversational flows for enterprise support and sales.",
       tags: ['AI Chatbots & Conversational AI'],
       result: "Achieved seamless balance between LLM flexibility and operational control",
-      image: "https://cortex-storage.googleapis.com/artifact/09177ed2-6a6d-4767-8cfb-6101f3ac2278.png"
+      image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2000&auto=format&fit=crop"
     },
     {
-      id: 2,
+      id: 5,
       title: "Ai voice agent | Bubble.io App",
       category: "AI Voice & Automation Systems",
       categoryDesc: "Complete rescue and optimization of a Bubble.io application. Enhanced with OpenAI-driven features, UI/UX overhauls, and backend workflow automation.",
@@ -1166,7 +1287,7 @@ const PortfolioPage = () => {
       videoUrl: "https://www.dropbox.com/scl/fi/iubfgyb7cppo7y7efjpch/ContractorPost-1.AI?rlkey=ypdelpk56nfraoch5qgrawspz&st=9jj6z3pm&raw=1"
     },
     {
-      id: 3,
+      id: 6,
       title: "AI Voice Agent for Dick Watts Insurance",
       category: "AI Voice & Automation Systems",
       categoryDesc: "Advanced 3-agent insurance handling system built with Retell AI. Consolidates quotes, claims, and scheduling into a zero-latency call flow with Twilio and SendGrid automation.",
@@ -1175,7 +1296,7 @@ const PortfolioPage = () => {
       videoUrl: "https://www.dropbox.com/scl/fi/y1lbm1vcai8wivzmaf4px/AI-Voice-Agent-for-Dick-Watts-Insurance-Calendly-Vercel-Retell.mp4?rlkey=ab4siutfomd39n09h0ardp106&st=xbdle04n&raw=1"
     },
     {
-      id: 4,
+      id: 7,
       title: "Vapi Appointment Booking Bot in GoHighLevel",
       category: "AI Voice & Automation Systems",
       categoryDesc: "Dynamic AI calling agent that instantly calls Facebook leads, mentions prospect names and numbers, and handles inbound/outbound booking via Retell/Vapi.",
@@ -1184,7 +1305,7 @@ const PortfolioPage = () => {
       videoUrl: "https://www.dropbox.com/scl/fi/yf0xxs14tdnbjoromu9gn/Vapi-Dashboard.mp4?rlkey=hgzy81mhmqc7u0e47jxruenc4&st=6lep05s0&raw=1"
     },
     {
-      id: 5,
+      id: 8,
       title: "Retell-Channel Voice Assistant",
       category: "AI Voice & Automation Systems",
       categoryDesc: "End-to-end call handling and lead qualification systems utilizing Retell AI.",
@@ -1193,7 +1314,7 @@ const PortfolioPage = () => {
       videoUrl: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/n8n%20integration.mp4"
     },
     {
-      id: 6,
+      id: 9,
       title: "Intelligent CRM Bot",
       category: "AI Chatbots & Conversational AI",
       categoryDesc: "Multi-channel support bots with live CRM integration.",
@@ -1202,7 +1323,7 @@ const PortfolioPage = () => {
       image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/AI%20Chatbots%20&%20Virtual%20Assistants.png"
     },
     {
-      id: 7,
+      id: 10,
       title: "Operations Command Center",
       category: "Custom Web & Mobile Applications",
       categoryDesc: "Scalable SaaS dashboards and internal business tools.",
@@ -1211,7 +1332,7 @@ const PortfolioPage = () => {
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop"
     },
     {
-      id: 8,
+      id: 11,
       title: "Enterprise Booking System",
       category: "High-Converting Website Design",
       categoryDesc: "UX-focused landing pages and appointment funnels.",
@@ -1220,7 +1341,7 @@ const PortfolioPage = () => {
       image: "https://images.unsplash.com/photo-1551288049-bbbda536ad0a?q=80&w=2070&auto=format&fit=crop"
     },
     {
-      id: 9,
+      id: 12,
       title: "AI Video Content Engine",
       category: "AI-Powered Marketing & Content Automation",
       categoryDesc: "Automated social posting and video generation pipelines.",
@@ -1229,7 +1350,7 @@ const PortfolioPage = () => {
       image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1974&auto=format&fit=crop"
     },
     {
-      id: 10,
+      id: 13,
       title: "HubSpot Workflow Engine",
       category: "CRM & Business Process Automation",
       categoryDesc: "Complex backend logic for automated lead management.",
@@ -1238,7 +1359,7 @@ const PortfolioPage = () => {
       image: "https://images.unsplash.com/photo-1454165833767-131e84a1a005?q=80&w=2070&auto=format&fit=crop"
     },
     {
-      id: 11,
+      id: 14,
       title: "Corporate AI Roadmap",
       category: "AI Strategy & Consulting",
       categoryDesc: "Full-scale implementation strategy for legacy businesses.",
@@ -1247,7 +1368,7 @@ const PortfolioPage = () => {
       image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop"
     },
     {
-      id: 12,
+      id: 15,
       title: "Lead Intelligence Pipeline",
       category: "Data Intelligence",
       categoryDesc: "Scraping and enrichment systems for high-volume sales teams.",
@@ -1329,19 +1450,7 @@ const PortfolioPage = () => {
               >
                 {/* Media Wrap */}
                 <div className="aspect-[4/3] overflow-hidden relative">
-                  {(project as any).videoUrl ? (
-                    <CardVideo videoUrl={(project as any).videoUrl} noMargin />
-                  ) : (
-                    <>
-                      <img 
-                        src={(project as any).image} 
-                        alt={project.title} 
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-100"
-                        referrerPolicy="no-referrer"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent opacity-80" />
-                    </>
-                  )}
+                  <ProjectMedia project={project} />
                   
                   {/* Category Tag */}
                   <div className="absolute top-6 left-6">
