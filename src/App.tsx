@@ -41,7 +41,7 @@ import { motion, AnimatePresence } from 'motion/react';
 const BOOKING_URL = "https://calendar.app.google/tJyftT7GPccWr12m9";
 
 // --- Types ---
-type Page = 'home' | 'services' | 'industries' | 'portfolio' | 'about' | 'contact' | 'faq';
+type Page = 'home' | 'services' | 'industries' | 'portfolio' | 'about' | 'contact' | 'faq' | 'booking';
 
 interface Service {
   title: string;
@@ -135,15 +135,13 @@ const Navbar = ({ currentPage, setCurrentPage }: { currentPage: Page, setCurrent
                 {item.label}
               </button>
             ))}
-            <a 
-              href={BOOKING_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button 
+              onClick={() => setCurrentPage('booking')}
               className="bg-brand-blue text-brand-black px-6 py-2.5 rounded-full text-sm font-bold hover:bg-brand-cyan transition-all glow-blue flex items-center gap-2"
             >
               <Calendar className="w-4 h-4" />
               Book Appointment
-            </a>
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -178,15 +176,16 @@ const Navbar = ({ currentPage, setCurrentPage }: { currentPage: Page, setCurrent
                 </button>
               ))}
               <div className="pt-6 px-3">
-                <a 
-                  href={BOOKING_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button 
+                  onClick={() => {
+                    setCurrentPage('booking');
+                    setIsOpen(false);
+                  }}
                   className="w-full bg-brand-blue text-brand-black px-6 py-4 rounded-xl text-center font-bold flex items-center justify-center gap-2 shadow-lg shadow-brand-blue/20"
                 >
                   <Calendar className="w-5 h-5" />
                   Book Appointment
-                </a>
+                </button>
               </div>
             </div>
           </motion.div>
@@ -232,16 +231,14 @@ const Hero = ({ onCtaClick }: { onCtaClick: (p: Page) => void }) => (
             We design AI agents, voice systems, and automation infrastructure that help U.S. businesses convert and retain customers 24/7.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a 
-              href={BOOKING_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button 
+              onClick={() => onCtaClick('booking')}
               className="w-full sm:w-auto bg-brand-blue text-brand-black px-8 py-4 rounded-full font-bold text-lg hover:bg-brand-cyan transition-all glow-blue flex items-center justify-center group gap-2"
             >
               <Calendar className="w-5 h-5" />
               Book Appointment
               <ArrowRight className="ml-1 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
+            </button>
             <button 
               onClick={() => onCtaClick('services')}
               className="w-full sm:w-auto bg-white/5 border border-white/10 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white/10 transition-all"
@@ -935,7 +932,7 @@ const Footer = ({ setCurrentPage }: { setCurrentPage: (p: Page) => void }) => (
             <li><button onClick={() => setCurrentPage('about')} className="hover:text-brand-blue transition-colors">About Us</button></li>
             <li><button onClick={() => setCurrentPage('portfolio')} className="hover:text-brand-blue transition-colors">Portfolio</button></li>
             <li><button onClick={() => setCurrentPage('contact')} className="hover:text-brand-blue transition-colors">Contact</button></li>
-            <li><a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="text-brand-blue font-bold hover:underline">Book Appointment</a></li>
+            <li><button onClick={() => setCurrentPage('booking')} className="text-brand-blue font-bold hover:underline">Book Appointment</button></li>
           </ul>
         </div>
       </div>
@@ -1465,6 +1462,105 @@ const PortfolioPage = () => {
     },
     {
       id: 21,
+      title: "Jumpstarting the Jumpstarter",
+      category: "AI-Powered Marketing & Content Automation",
+      categoryDesc: "High-impact UGC production for DSMD Autos. Overcame logistical and technical challenges to deliver clean, compelling content now performing on Amazon Canada.",
+      tags: ['AI-Powered Marketing & Content Automation'],
+      result: "Delivered conversion-focused UGC that earned full rights purchase and high performance on Amazon.",
+      videoUrl: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Alora/DSMD%20Autos%20Power%20Bank%20-%20Fiverr%20Port.mp4"
+    },
+    {
+      id: 22,
+      title: "One Cone, One Dog, Zero Chill",
+      category: "AI-Powered Marketing & Content Automation",
+      categoryDesc: "High-energy pet marketing UGC featuring Griffin the Boston Terrier. Successfully showcased KEDI's pet recovery cone through chaotic but compelling storytelling.",
+      tags: ['AI-Powered Marketing & Content Automation'],
+      result: "Produced high-engagement video content that successfully drove product awareness for KEDI pet supplies.",
+      videoUrl: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Alora/cleaned.mp4"
+    },
+    {
+      id: 23,
+      title: "BOYA Mini Lavalier Microphone Amazon UGC",
+      category: "AI-Powered Marketing & Content Automation",
+      categoryDesc: "Authentic, performance-driven UGC for the BOYA Mini Lavalier Mic. Focused on real-world audio quality and usability for budget-conscious content creators.",
+      tags: ['AI-Powered Marketing & Content Automation'],
+      result: "Created high-trust product demo content that resonates with the Amazon shopper demographic.",
+      videoUrl: "https://www.dropbox.com/scl/fi/amqmub9fol7ja9qzmgg6o/cleaned-1.mp4?rlkey=e1r0emnv84uw87tqbucz4qu75&st=yhpdbf8e&raw=1"
+    },
+    {
+      id: 24,
+      title: "Karsam Jeep Wrangler Brake Ring Light Amazon UGC",
+      category: "AI-Powered Marketing & Content Automation",
+      categoryDesc: "High-impact Amazon UGC showcasing the installation and performance of a Jeep Wrangler Brake Ring Light. Expertly edited using smart jump cuts to condense a 90-minute project into a fast, engaging visual demo.",
+      tags: ['AI-Powered Marketing & Content Automation'],
+      result: "Delivered a high-conversion product demonstration that simplifies complex installation for potential buyers.",
+      videoUrl: "https://www.dropbox.com/scl/fi/8gl9xtqncrskru792g0ac/895b92a9-90ec-41e2-b3b6-86a7994e2972.mp4?rlkey=47cbs0lmxi7n1xo0seqdqkbyp&st=tg6i8hsu&raw=1"
+    },
+    {
+      id: 25,
+      title: "Voiceover Style UGC video",
+      category: "AI-Powered Marketing & Content Automation",
+      categoryDesc: "Premium voiceover UGC featuring high-impact visual hooks. Praised by clients for its natural flow, character-driven storytelling, and high conversion potential.",
+      tags: ['AI-Powered Marketing & Content Automation'],
+      result: "Received 5-star client review for natural style and high-character content that effectively sells.",
+      videoUrl: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Alora/cleaned%20(2).mp4"
+    },
+    {
+      id: 26,
+      title: "Scroll Stopping Skincare Video",
+      category: "AI-Powered Marketing & Content Automation",
+      categoryDesc: "High-engagement skincare UGC focused on ease of use and client satisfaction. Delivered exactly to specifications with minimal instruction, earning repeat business interest.",
+      tags: ['AI-Powered Marketing & Content Automation'],
+      result: "Delivered a scroll-stopping visual experience that precisely matched a skincare brand's vision with minimal oversight.",
+      videoUrl: "https://www.dropbox.com/scl/fi/6eed6tz3lc53u6amm4flw/cleaned-3.mp4?rlkey=47g6fm3o2ydkj9igoc4f3wa4u&st=mbj2eavk&raw=1"
+    },
+    {
+      id: 27,
+      title: "UGC ad with Music",
+      category: "AI-Powered Marketing & Content Automation",
+      categoryDesc: "High-energy UGC advertisement professionally synced with a rhythmic soundtrack to enhance brand storytelling and viewer retention.",
+      tags: ['AI-Powered Marketing & Content Automation'],
+      result: "Produced a dynamic, music-driven advertisement that effectively captures audience attention through auditory and visual synergy.",
+      videoUrl: "https://www.dropbox.com/scl/fi/wwibueeo1geuce9p4v4s3/cleaned-4.mp4?rlkey=ya46h8lhw0ynz1n7jqb54eu0q&st=2wnzr27y&raw=1"
+    },
+    {
+      id: 28,
+      title: "UGC ad for roofing company",
+      category: "AI-Powered Marketing & Content Automation",
+      categoryDesc: "Professional UGC campaign fully filmed and edited for a roofing company, showcasing end-to-end production capabilities for home service providers.",
+      tags: ['AI-Powered Marketing & Content Automation'],
+      result: "Delivered a complete visual marketing asset that enhances brand authority for local service businesses.",
+      videoUrl: "https://www.dropbox.com/scl/fi/uhstxwxakau730sfhjolk/cleaned-5.mp4?rlkey=akqmyvvdlkaxxwd5f58din2q9&st=rd9iaz2n&raw=1"
+    },
+    {
+      id: 29,
+      title: "Software Explainer Video",
+      category: "AI-Powered Marketing & Content Automation",
+      categoryDesc: "Concise and informative software explainer video. Fully filmed and edited to highlight key features and value propositions for a software company.",
+      tags: ['AI-Powered Marketing & Content Automation'],
+      result: "Produced a professional video asset that simplifies complex software functionality for end-users.",
+      videoUrl: "https://www.dropbox.com/scl/fi/k6zq4xthym27uqvsum96w/cleaned-7.mp4?rlkey=ci34oxm63n5modjiw0y1xmymz&st=qxgjkoiq&raw=1"
+    },
+    {
+      id: 30,
+      title: "Natural skincare routine",
+      category: "AI-Powered Marketing & Content Automation",
+      categoryDesc: "End-to-end production of a natural skincare routine video, including scripting, filming, and editing. Tailored to meet the client's request for an authentic and organic visual style.",
+      tags: ['AI-Powered Marketing & Content Automation'],
+      result: "Produced a high-engagement skincare routine video capturing an authentic brand aesthetic.",
+      videoUrl: "https://www.dropbox.com/scl/fi/7j6fmqpnmpa6dau4c4z6e/cleaned-8.mp4?rlkey=sunnuln7ytz4mc4fjl0z8ts9w&st=bmo1t2hu&raw=1"
+    },
+    {
+      id: 31,
+      title: "Website intro video",
+      category: "AI-Powered Marketing & Content Automation",
+      categoryDesc: "Captivating dental platform introduction video. Managed the full lifecycle from vision discovery and storyboarding to professional filming and production.",
+      tags: ['AI-Powered Marketing & Content Automation'],
+      result: "Created a high-impact visual first impression that effectively welcomes and orientates website visitors.",
+      videoUrl: "https://www.dropbox.com/scl/fi/a6d8sonttsjqts5s15yj0/cleaned-9.mp4?rlkey=pviifxsjvk5fvicpurf84hxli&st=r1da90nq&raw=1"
+    },
+    {
+      id: 32,
       title: "HubSpot Workflow Engine",
       category: "CRM & Business Process Automation",
       categoryDesc: "Complex backend logic for automated lead management.",
@@ -1473,7 +1569,7 @@ const PortfolioPage = () => {
       image: "https://images.unsplash.com/photo-1454165833767-131e84a1a005?q=80&w=2070&auto=format&fit=crop"
     },
     {
-      id: 22,
+      id: 33,
       title: "Corporate AI Roadmap",
       category: "AI Strategy & Consulting",
       categoryDesc: "Full-scale implementation strategy for legacy businesses.",
@@ -1482,13 +1578,31 @@ const PortfolioPage = () => {
       image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop"
     },
     {
-      id: 23,
+      id: 34,
       title: "Lead Intelligence Pipeline",
       category: "Data Intelligence",
       categoryDesc: "Scraping and enrichment systems for high-volume sales teams.",
       tags: ['AI-Powered Marketing & Content Automation', 'CRM & Business Process Automation'],
       result: "Provided 5,000+ enriched b2b leads monthly",
       image: "https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=2070&auto=format&fit=crop"
+    },
+    {
+      id: 35,
+      title: "WordPress Travel Agency Website",
+      category: "High-Converting Website Design",
+      categoryDesc: "Complete WordPress-based travel agency platform developed for a U.S. client. Focuses on immersive transformation retreat experiences with destination guides, customer reviews, and integrated blog functionality.",
+      tags: ['High-Converting Website Design'],
+      result: "Boosted client confidence and received high praise for a polished, professional brand presence.",
+      images: [
+        "/input_file_0.png",
+        "/input_file_1.png",
+        "/input_file_2.png",
+        "/input_file_3.png",
+        "/input_file_4.png",
+        "/input_file_5.png",
+        "/input_file_6.png",
+        "/input_file_7.png"
+      ]
     }
   ];
 
@@ -1729,7 +1843,7 @@ const FAQSection = () => {
   );
 };
 
-const FAQPage = () => (
+const FAQPage = ({ setPage }: { setPage: (p: Page) => void }) => (
   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
     <section className="pt-32 pb-12 lg:pt-48 lg:pb-20 bg-brand-navy/10 relative overflow-hidden">
       <div className="absolute inset-0 z-0 opacity-20">
@@ -1757,16 +1871,14 @@ const FAQPage = () => (
             Our team is here to help you navigate the world of AI automation. Reach out for a free discovery call.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a 
-              href={BOOKING_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button 
+              onClick={() => setPage('booking')}
               className="px-8 py-4 bg-brand-blue text-brand-black rounded-xl font-bold hover:bg-brand-cyan transition-all glow-blue flex items-center gap-2"
             >
               <Calendar className="w-5 h-5" />
               Book Discovery Call
-            </a>
-            <button className="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-xl font-bold hover:bg-white/10 transition-all">
+            </button>
+            <button onClick={() => setPage('contact')} className="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-xl font-bold hover:bg-white/10 transition-all">
               Contact Support
             </button>
           </div>
@@ -1909,7 +2021,7 @@ const AboutPage = () => (
   </motion.div>
 );
 
-const ContactPage = () => (
+const ContactPage = ({ setPage }: { setPage: (p: Page) => void }) => (
   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pt-32 pb-24">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
@@ -1923,15 +2035,13 @@ const ContactPage = () => (
             <div className="p-8 rounded-3xl bg-gradient-to-br from-brand-blue/10 to-brand-cyan/10 border border-brand-blue/20">
               <h3 className="text-2xl font-bold text-white mb-4">Direct Booking</h3>
               <p className="text-slate-400 mb-6">Skip the form and pick a time that works for you on our calendar.</p>
-              <a 
-                href={BOOKING_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button 
+                onClick={() => setPage('booking')}
                 className="inline-flex items-center gap-2 bg-brand-blue text-brand-black px-8 py-4 rounded-xl font-bold hover:bg-brand-cyan transition-all glow-blue"
               >
                 <Calendar className="w-5 h-5" />
                 Book Appointment Now
-              </a>
+              </button>
             </div>
 
             <div className="flex items-center gap-6">
@@ -1981,6 +2091,43 @@ const ContactPage = () => (
   </motion.div>
 );
 
+const BookingPage = () => (
+  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+    <section className="pt-32 pb-20 lg:pt-48 lg:pb-32 bg-brand-black">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-4xl mx-auto mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <span className="inline-block px-4 py-1.5 rounded-full bg-brand-blue/10 border border-brand-blue/20 text-brand-blue text-xs font-bold uppercase tracking-widest mb-6">
+              Pick a Slot
+            </span>
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
+              Ready to <span className="text-gradient">Automate?</span>
+            </h1>
+            <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
+              Select a time for your 15-minute discovery call below.
+            </p>
+          </motion.div>
+        </div>
+
+        <div className="w-full bg-white rounded-[40px] overflow-hidden h-[800px] border border-white/10 shadow-2xl glow-blue/10">
+          <iframe 
+            src={BOOKING_URL} 
+            width="100%" 
+            height="100%" 
+            frameBorder="0"
+            title="Appointment Booking"
+            className="bg-white"
+          />
+        </div>
+      </div>
+    </section>
+  </motion.div>
+);
+
 // --- Main App ---
 
 export default function App() {
@@ -2008,8 +2155,9 @@ export default function App() {
             {currentPage === 'industries' && <IndustriesPage />}
             {currentPage === 'portfolio' && <PortfolioPage />}
             {currentPage === 'about' && <AboutPage />}
-            {currentPage === 'faq' && <FAQPage />}
-            {currentPage === 'contact' && <ContactPage />}
+            {currentPage === 'faq' && <FAQPage setPage={setCurrentPage} />}
+            {currentPage === 'contact' && <ContactPage setPage={setCurrentPage} />}
+            {currentPage === 'booking' && <BookingPage />}
           </motion.div>
         </AnimatePresence>
       </main>
