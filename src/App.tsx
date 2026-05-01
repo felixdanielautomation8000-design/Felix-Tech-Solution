@@ -1594,14 +1594,74 @@ const PortfolioPage = () => {
       tags: ['High-Converting Website Design'],
       result: "Boosted client confidence and received high praise for a polished, professional brand presence.",
       images: [
-        "/input_file_0.png",
-        "/input_file_1.png",
-        "/input_file_2.png",
-        "/input_file_3.png",
-        "/input_file_4.png",
-        "/input_file_5.png",
-        "/input_file_6.png",
-        "/input_file_7.png"
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Cape1.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Cape2.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Cape3.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Cape4.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Cape5.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Cape6.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Cape7.png"
+      ]
+    },
+    {
+      id: 36,
+      title: "Student Consultancy Website",
+      category: "High-Converting Website Design",
+      categoryDesc: "Developed the Mind Mentor Overseas platform, a dedicated resource for students pursuing international education. Designed with a focus on clear information architecture for study programs, visa support, and counseling services.",
+      tags: ['High-Converting Website Design'],
+      result: "Delivered a high-performance platform praised for its aesthetics and seamless user navigation.",
+      images: [
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Student1.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Student2.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Student3.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Student4.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Student5.png"
+      ]
+    },
+    {
+      id: 37,
+      title: "Website for Australian Polytechnic Institute",
+      category: "High-Converting Website Design",
+      categoryDesc: "Professional WordPress platform for the Australian Polytechnic Institute. Features an intuitive structure with course pages and academic tools, tailored specifically for educational excellence.",
+      tags: ['High-Converting Website Design'],
+      result: "Achieved high client satisfaction with an SEO-optimized, secure, and academic-aligned brand presence.",
+      images: [
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Poly1.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Poly2.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Poly3.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Poly4.png"
+      ]
+    },
+    {
+      id: 38,
+      title: "Home Care Services",
+      category: "High-Converting Website Design",
+      categoryDesc: "Responsive, user-friendly website for Anas Home Health Care Inc., a licensed 245D provider in Minnesota. Showcases community-based services with professional presentation and fast-loading pages.",
+      tags: ['High-Converting Website Design'],
+      result: "Produced a professional digital presence that effectively represents healthcare services to the local community.",
+      images: [
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Care1.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Care2.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Care3.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Care4.png"
+      ]
+    },
+    {
+      id: 39,
+      title: "Ecommerce Website",
+      category: "High-Converting Website Design",
+      categoryDesc: "Modern WooCommerce-based e-commerce platform built for high performance and usability. Features advanced layout adjustments and fine-tuned mobile responsiveness for a seamless shopping experience.",
+      tags: ['High-Converting Website Design'],
+      result: "Earned a 5-star review for delivering a fully functional, professional online store that drives business growth.",
+      images: [
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/E1.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/E2.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/E3.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/E4.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/E5.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/E6.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/E7.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/E8.png"
       ]
     }
   ];
