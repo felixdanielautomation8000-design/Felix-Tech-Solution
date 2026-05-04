@@ -33,7 +33,8 @@ import {
   GraduationCap,
   Sprout,
   Fish,
-  Utensils
+  Utensils,
+  Image as ImageIcon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -1201,8 +1202,154 @@ const ProjectMedia = ({ project }: { project: any }) => {
   );
 };
 
+const ProjectModal = ({ project, onClose }: { project: any, onClose: () => void }) => {
+  return (
+    <motion.div 
+      initial={{ opacity: 0 }} 
+      animate={{ opacity: 1 }} 
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-brand-black/95 backdrop-blur-md"
+      onClick={onClose}
+    >
+      <motion.div 
+        initial={{ scale: 0.9, y: 20 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.9, y: 20 }}
+        className="bg-brand-navy border border-white/10 rounded-[32px] w-full max-w-6xl max-h-[90vh] overflow-y-auto no-scrollbar relative shadow-3xl text-left"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Close Button */}
+        <button 
+          onClick={onClose}
+          className="fixed top-8 right-8 z-50 p-2.5 bg-brand-black/60 backdrop-blur-md hover:bg-brand-blue text-white rounded-xl transition-all border border-white/10 shadow-2xl group"
+        >
+          <X className="w-6 h-6 group-hover:rotate-90 transition-transform duration-300" />
+        </button>
+
+        <div className="p-8 md:p-12">
+          {/* Title & Stats */}
+          <div className="mb-12">
+            <div className="flex flex-wrap items-center gap-3 mb-4">
+              <span className="px-4 py-1.5 bg-brand-blue/10 text-brand-blue text-[10px] font-black uppercase tracking-widest rounded-full border border-brand-blue/20">
+                {project.category}
+              </span>
+              {project.tags.map((tag: string) => (
+                <span key={tag} className="px-4 py-1.5 bg-white/5 text-slate-400 text-[10px] font-bold uppercase tracking-widest rounded-full border border-white/5">
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <h2 className="text-4xl md:text-6xl font-bold italic tracking-tight mb-6">
+              {project.title.split(' ').map((word: string, i: number) => 
+                i === project.title.split(' ').length - 1 ? <span key={i} className="text-gradient">{word} </span> : <span key={i}>{word} </span>
+              )}
+            </h2>
+            <div className="flex items-center gap-4 p-6 bg-brand-blue/5 border border-brand-blue/10 rounded-2xl max-w-3xl">
+              <div className="w-12 h-12 rounded-full bg-brand-blue/20 flex items-center justify-center shrink-0">
+                <TrendingUp className="w-6 h-6 text-brand-blue" />
+              </div>
+              <p className="text-lg font-bold text-white italic">
+                {project.result}
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Left Column: Media */}
+            <div className="space-y-8">
+              {project.videoUrl && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xl font-bold flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-brand-blue/10 flex items-center justify-center">
+                        <Play className="w-4 h-4 text-brand-blue fill-current" />
+                      </div>
+                      Video Walkthrough
+                    </h3>
+                  </div>
+                  <div className="rounded-2xl overflow-hidden border border-white/10 bg-brand-black shadow-2xl aspect-video">
+                    <CardVideo videoUrl={project.videoUrl} noMargin />
+                  </div>
+                </div>
+              )}
+
+              {project.images && project.images.length > 0 && (
+                <div className="space-y-6">
+                  <h3 className="text-xl font-bold flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-brand-blue/10 flex items-center justify-center">
+                      <ImageIcon className="w-4 h-4 text-brand-blue" />
+                    </div>
+                    Visual Journey
+                  </h3>
+                  <div className="grid grid-cols-1 gap-6">
+                    {project.images.map((img: string, idx: number) => (
+                      <div key={idx} className="group/img relative rounded-2xl overflow-hidden border border-white/5 shadow-xl aspect-[16/10]">
+                        <img 
+                          src={img} 
+                          alt={`${project.title} screenshot ${idx + 1}`} 
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105"
+                          referrerPolicy="no-referrer"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-brand-black/60 to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity flex items-end p-6">
+                          <p className="text-sm font-medium text-white/80">View Capture 0{idx + 1}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Right Column: Case Study Info */}
+            <div className="space-y-12 h-fit lg:sticky lg:top-8">
+              <div className="space-y-6">
+                <h3 className="text-xl font-bold text-brand-blue uppercase tracking-widest text-[12px]">The Solution</h3>
+                <p className="text-xl text-slate-300 leading-relaxed font-light">
+                  {project.categoryDesc}
+                </p>
+              </div>
+
+              <div className="space-y-8">
+                <h3 className="text-xl font-bold text-brand-blue uppercase tracking-widest text-[12px]">Key Features</h3>
+                <div className="grid grid-cols-1 gap-4">
+                  {[
+                    "User-Centric Interface Design",
+                    "Automated Workflow Integration",
+                    "Enterprise-Grade Scalability",
+                    "Real-time Performance Analytics"
+                  ].map((feature, i) => (
+                    <div key={i} className="flex items-center gap-4 p-4 bg-white/5 border border-white/5 rounded-xl hover:bg-white/10 transition-colors">
+                      <div className="w-6 h-6 rounded-full bg-brand-blue/20 flex items-center justify-center shrink-0">
+                        <CheckCircle2 className="w-3 h-3 text-brand-blue" />
+                      </div>
+                      <span className="font-medium text-slate-200">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button 
+                className="w-full py-6 bg-brand-blue text-brand-black rounded-2xl font-black text-lg flex items-center justify-center gap-3 hover:bg-brand-cyan transition-all glow-blue group"
+                onClick={() => {
+                  onClose();
+                  // Open booking
+                  window.open(BOOKING_URL, '_blank');
+                }}
+              >
+                Start Your System Build
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
 const PortfolioPage = () => {
   const [filter, setFilter] = useState('All');
+  const [selectedProject, setSelectedProject] = useState<any>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -1734,17 +1881,26 @@ const PortfolioPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
-                className="group relative flex flex-col h-full bg-brand-navy/30 rounded-[32px] border border-white/5 overflow-hidden hover:border-brand-blue/30 hover:shadow-2xl hover:shadow-brand-blue/10 transition-all duration-500"
+                onClick={() => setSelectedProject(project)}
+                className="group relative flex flex-col h-full bg-brand-navy/30 rounded-[32px] border border-white/5 overflow-hidden hover:border-brand-blue/30 hover:shadow-2xl hover:shadow-brand-blue/10 transition-all duration-500 cursor-pointer"
               >
                 {/* Media Wrap */}
                 <div className="aspect-[4/3] overflow-hidden relative">
                   <ProjectMedia project={project} />
                   
                   {/* Category Tag */}
-                  <div className="absolute top-6 left-6">
+                  <div className="absolute top-6 left-6 z-10">
                     <span className="px-3 py-1 bg-brand-black/60 backdrop-blur-md text-brand-blue text-[10px] font-black uppercase tracking-tighter rounded-md border border-brand-blue/20">
                       {project.category}
                     </span>
+                  </div>
+
+                  {/* Hover Overlay */}
+                  <div className="absolute inset-0 bg-brand-blue/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <div className="px-6 py-3 bg-brand-black/80 backdrop-blur-md border border-brand-blue/30 rounded-full text-white font-bold flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 shadow-2xl">
+                      View System Details
+                      <Maximize2 className="w-4 h-4 text-brand-blue" />
+                    </div>
                   </div>
                 </div>
 
@@ -1773,6 +1929,16 @@ const PortfolioPage = () => {
             ))}
           </AnimatePresence>
         </div>
+
+        {/* Modal */}
+        <AnimatePresence>
+          {selectedProject && (
+            <ProjectModal 
+              project={selectedProject} 
+              onClose={() => setSelectedProject(null)} 
+            />
+          )}
+        </AnimatePresence>
       </div>
     </motion.div>
   );
