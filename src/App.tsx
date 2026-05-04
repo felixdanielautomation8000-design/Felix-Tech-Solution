@@ -1399,14 +1399,14 @@ const PortfolioPage = () => {
       categoryDesc: "Comprehensive wellness and medical supply platform. Offers seamless access to medical supplies and IV kits, featuring a user-friendly product discovery interface, secure checkout, and full order tracking.",
       tags: ['Custom Web & Mobile Applications'],
       result: "Simplified health management through a streamlined digital medical supply marketplace.",
-      videoUrl: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Vitamedics.mp4",
+      videoUrl: "https://www.dropbox.com/scl/fi/mtnoxd05khbvuo8ukc7dk/cleaned.mp4?rlkey=jt2uhmkkaixy3rhs2exxbno02&st=d1vp3xmh&raw=1",
       images: [
-        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Vitamin1.png",
-        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Vitamin2.png",
-        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Vitamin3.png",
-        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Vitamin4.png",
-        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Vitamin5.png",
-        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Vitamin6.png"
+        "https://www.dropbox.com/scl/fi/o36mekevb6u68q6raraa7/Vitamin1.png?rlkey=kytmtrz9keo5rrev45j9qwbgo&st=6nhf9s9l&raw=1",
+        "https://www.dropbox.com/scl/fi/y18zxdggxhzk1h6xgkxhy/Vitamin2.png?rlkey=y6g5z4rxaxvssjdyn7siqi7d1&st=i1hv2dlx&raw=1",
+        "https://www.dropbox.com/scl/fi/8slaakfn615sla9a8j85z/Vitamin3.png?rlkey=55czomnf4b5smmpacul559i5r&st=hrdtzjef&raw=1",
+        "https://www.dropbox.com/scl/fi/jt0i1ydsi65ukbp1b3sfz/Vitamin4.png?rlkey=8sb6kyw1wzv5qkka7pwv2csmw&st=tz8z7zn4&raw=1",
+        "https://www.dropbox.com/scl/fi/j5bm0bekfxq3d41pe03wu/Vitamin5.png?rlkey=psegdnyiwbj916ue6n9eblrvh&st=909plxog&raw=1",
+        "https://www.dropbox.com/scl/fi/m343wzkyr4qkx160qlwcs/Vitamin6.png?rlkey=chms4qr9mk2c21uco51epw461&st=rywqidhd&raw=1"
       ]
     },
     {
