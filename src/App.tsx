@@ -1431,13 +1431,13 @@ const PortfolioPage = () => {
       categoryDesc: "Comprehensive restaurant POS and Order Management System designed to streamline daily operations for both admins and employees. Features real-time dashboards, payment processing (Apple Pay), and secure role-based access.",
       tags: ['Custom Web & Mobile Applications'],
       result: "Simplified restaurant workflows and enhanced service efficiency through integrated POS and order tracking.",
-      videoUrl: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/GastRonomIQ.mp4",
+      videoUrl: "https://www.dropbox.com/scl/fi/dfxli36khbdudtfb6jepn/GastRonomIQ.mp4?rlkey=r2lgray3jeaugbrxwlq6ogaze&st=xqvq80ql&raw=1",
       images: [
-        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Restaurant1.png",
-        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Restaurant2.png",
-        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Restaurant3.png",
-        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Restaurant4.png",
-        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Restaurant5.png"
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Restaurant1.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Restaurant2.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Restaurant3.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Restaurant4.png",
+        "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Restaurant5.png"
       ]
     },
     {
