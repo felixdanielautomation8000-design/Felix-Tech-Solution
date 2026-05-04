@@ -625,55 +625,55 @@ const IndustriesSection = ({ showHeader = true }: { showHeader?: boolean }) => {
       icon: <Building2 />, 
       name: "Real Estate Firms",
       description: "Automate lead qualification, property inquiries, and appointment scheduling to close deals faster.",
-      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Create_a_highly_202604121215.png"
+      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Real%20Estate%20&%20Property:.jpeg"
     },
     { 
       icon: <Globe />, 
       name: "E-commerce Brands",
       description: "Enhance customer experience with AI-driven product recommendations and 24/7 automated support.",
-      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Create_a_futuristic_202604121222.png"
+      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/E-commerce%20.jpeg"
     },
     { 
       icon: <BarChart3 />, 
       name: "Marketing Agencies",
       description: "Scale content production and data analysis with custom AI workflows tailored for client success.",
-      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Create_a_cinematic_202604121226.png"
+      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Marketer.jpeg"
     },
     { 
       icon: <Users />, 
       name: "Coaches & Consultants",
       description: "Streamline client onboarding and support with personalized AI assistants that reflect your expertise.",
-      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Create_a_warm_202604121232.png"
+      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Coaches%20.jpeg"
     },
     { 
       icon: <Cpu />, 
       name: "Enterprise Organizations",
       description: "Integrate scalable AI infrastructure to optimize complex operations and drive cross-departmental efficiency.",
-      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Create_a_large-scale_202604121135.png"
+      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Enterprise.jpeg"
     },
     { 
       icon: <GraduationCap />, 
       name: "Educational Institutions & EdTech",
       description: "Empower learning with AI tutors and administrative automation for a more personalized student experience.",
-      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Create_a_clean,_202604130329.png"
+      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Educational.jpeg"
     },
     { 
       icon: <Sprout />, 
       name: "Agriculture & Farming",
       description: "Leverage AI for precision monitoring and predictive analytics to maximize yield and operational efficiency.",
-      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Create_a_realistic_202604130312.png"
+      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Agriculture"
     },
     { 
       icon: <Fish />, 
       name: "Commercial Fishing & Aquaculture",
       description: "Optimize supply chains and monitor aquatic environments with intelligent AI-driven data systems.",
-      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Create_a_realistic_202604130337.png"
+      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Commercial%20Fishing%20.jpeg"
     },
     { 
       icon: <Utensils />, 
       name: "Restaurants & Food Services",
       description: "Improve guest satisfaction with automated reservations, order management, and AI-powered customer feedback.",
-      image: "https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Untitled%20folder/Create_a_modern_202604130319.png"
+      image: "https://www.dropbox.com/scl/fi/ydicaxkpcoofdj3o9zo75/Restaurant_manager_AI_automation-_202605040855.jpeg?rlkey=78xztfl4zde7feihvs9sjki06&st=9p3wabdm&raw=1"
     }
   ];
 
