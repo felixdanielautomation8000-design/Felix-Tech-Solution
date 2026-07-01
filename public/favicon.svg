@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%" fill="none">
+  <defs>
+    <!-- Neon Gradient -->
+    <linearGradient id="neonGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#00F2FE" />
+      <stop offset="50%" stopColor="#00D2FC" />
+      <stop offset="100%" stopColor="#3B82F6" />
+    </linearGradient>
+
+    <!-- Dark Metallic Gradient for the Anvil Base -->
+    <linearGradient id="anvilBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#0B1C33" />
+      <stop offset="50%" stopColor="#030C1A" />
+      <stop offset="100%" stopColor="#0F2B4C" />
+    </linearGradient>
+
+    <!-- Soft Radial Glow behind the anvil -->
+    <radialGradient id="behindGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stopColor="#00F2FE" stopOpacity="0.35" />
+      <stop offset="100%" stopColor="#00F2FE" stopOpacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Subtle background aura -->
+  <circle cx="100" cy="100" r="85" fill="url(#behindGlow)" />
+
+  <g transform="translate(0, -6)">
+    <!-- Left Horn -->
+    <path
+      d="
+        M 20 75 
+        C 40 73, 62 70, 76 68 
+        L 76 96 
+        C 62 96, 38 92, 20 75 Z
+      "
+      fill="url(#anvilBodyGrad)"
+      stroke="url(#neonGlow)"
+      stroke-width="1.5"
+    />
+
+    <!-- Main Anvil Body & Right Heel and Base -->
+    <path
+      d="
+        M 86 68 
+        L 174 68 
+        C 174 68, 178 72, 172 78
+        L 142 108
+        C 130 120, 125 130, 142 165
+        L 155 165
+        C 155 165, 150 178, 134 178
+        L 118 178
+        C 112 170, 88 170, 82 178
+        L 66 178
+        C 50 178, 45 165, 45 165
+        L 58 165
+        C 75 130, 70 120, 58 108
+        L 86 96
+        Z
+      "
+      fill="url(#anvilBodyGrad)"
+      stroke="url(#neonGlow)"
+      stroke-width="2.5"
+      stroke-linejoin="round"
+    />
+
+    <!-- Collar Band -->
+    <rect
+      x="76"
+      y="65"
+      width="10"
+      height="34"
+      rx="2"
+      fill="url(#anvilBodyGrad)"
+      stroke="url(#neonGlow)"
+      stroke-width="2"
+    />
+
+    <!-- Sound Waves / Ripples -->
+    <g opacity="0.85">
+      <circle cx="81" cy="82" r="10" stroke="url(#neonGlow)" stroke-width="1.5" fill="none" />
+      <circle cx="81" cy="82" r="18" stroke="url(#neonGlow)" stroke-width="1.5" fill="none" />
+      <circle cx="81" cy="82" r="26" stroke="url(#neonGlow)" stroke-width="1.5" fill="none" />
+      <circle cx="81" cy="82" r="34" stroke="url(#neonGlow)" stroke-width="1.5" fill="none" />
+      <circle cx="81" cy="82" r="42" stroke="url(#neonGlow)" stroke-width="1.5" fill="none" opacity="0.6" />
+      <circle cx="81" cy="82" r="50" stroke="url(#neonGlow)" stroke-width="1.5" fill="none" opacity="0.3" />
+    </g>
+
+    <!-- Left horn parallel detail lines -->
+    <path d="M 32 77 C 42 79, 52 81, 62 82" stroke="url(#neonGlow)" stroke-width="1" stroke-dasharray="3 3" opacity="0.7" />
+    <path d="M 36 73 C 46 75, 56 77, 66 78" stroke="url(#neonGlow)" stroke-width="1" stroke-dasharray="2 2" opacity="0.5" />
+
+    <!-- High-tech circuit traces -->
+    <g opacity="0.9">
+      <line x1="108" y1="96" x2="108" y2="135" stroke="url(#neonGlow)" stroke-width="2" />
+      <circle cx="108" cy="96" r="3" fill="#00F2FE" />
+
+      <!-- Trace 1 -->
+      <path d="M 108 105 L 138 78 L 164 78" stroke="url(#neonGlow)" stroke-width="2" stroke-linecap="round" />
+      <circle cx="164" cy="78" r="3.5" fill="#00F2FE" />
+
+      <!-- Trace 2 -->
+      <path d="M 108 115 L 128 98 L 152 98" stroke="url(#neonGlow)" stroke-width="2" stroke-linecap="round" />
+      <circle cx="152" cy="98" r="3.5" fill="#00F2FE" />
+
+      <!-- Trace 3 -->
+      <path d="M 108 125 L 130 148" stroke="url(#neonGlow)" stroke-width="2" stroke-linecap="round" />
+      <circle cx="130" cy="148" r="3.5" fill="#3B82F6" />
+
+      <!-- Trace 4 -->
+      <path d="M 108 135 L 90 155 L 70 155" stroke="url(#neonGlow)" stroke-width="1.5" stroke-linecap="round" />
+      <circle cx="70" cy="155" r="2.5" fill="#3B82F6" />
+
+      <path d="M 108 135 L 120 150 L 134 150" stroke="url(#neonGlow)" stroke-width="1.5" stroke-linecap="round" />
+      <circle cx="134" cy="150" r="2.5" fill="#00F2FE" />
+    </g>
+
+    <!-- Intersecting central node -->
+    <circle cx="108" cy="135" r="5" fill="#00F2FE" stroke="#0B1C33" stroke-width="1.5" />
+  </g>
+</svg>

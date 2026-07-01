@@ -34,9 +34,13 @@ import {
   Sprout,
   Fish,
   Utensils,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Settings,
+  HelpCircle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { AnvilLogo } from './components/AnvilLogo';
+import { ScrollReveal } from './components/ScrollReveal';
 
 // --- Constants ---
 const BOOKING_URL = "https://calendar.app.google/tJyftT7GPccWr12m9";
@@ -114,13 +118,7 @@ const Navbar = ({ currentPage, setCurrentPage }: { currentPage: Page, setCurrent
             className="flex items-center cursor-pointer" 
             onClick={() => setCurrentPage('home')}
           >
-            <img 
-              src="https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Anvil%20logo.png" 
-              alt="Anvilai LLC Logo" 
-              className="h-12 w-auto mr-3 object-contain drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]"
-              referrerPolicy="no-referrer"
-            />
-            <span className="text-xl font-extrabold text-white tracking-tighter">ANVILAI <span className="text-brand-blue">LLC</span></span>
+            <AnvilLogo variant="full" size={44} />
           </div>
 
           {/* Desktop Nav */}
@@ -563,54 +561,57 @@ const ServicesGrid = () => {
   return (
     <section className="py-24 bg-brand-navy/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Core AI Solutions</h2>
-          <p className="text-slate-400 max-w-2xl mx-auto">We deploy intelligent systems that solve real business problems and drive measurable ROI.</p>
-        </div>
+        <ScrollReveal direction="up">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Core AI Solutions</h2>
+            <p className="text-slate-400 max-w-2xl mx-auto">We deploy intelligent systems that solve real business problems and drive measurable ROI.</p>
+          </div>
+        </ScrollReveal>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {services.map((s, i) => (
-            <motion.div
-              key={i}
-              whileHover={{ y: -5 }}
-              className="relative p-8 rounded-3xl bg-glass neon-border overflow-hidden group flex flex-col"
-            >
-              <div className="relative z-10 flex flex-col h-full">
-                {s.videoId || s.videoUrl ? (
-                  <CardVideo videoId={s.videoId} videoUrl={s.videoUrl} />
-                ) : (
-                  <div className="w-16 h-16 bg-brand-blue/10 rounded-2xl flex items-center justify-center text-brand-blue mb-6">
-                    {s.icon}
-                  </div>
-                )}
-                <h3 className="text-2xl font-bold mb-4 text-white">{s.title}</h3>
-                <p className="text-slate-400 mb-6 leading-relaxed">{s.description}</p>
-                <ul className="space-y-3 mt-auto mb-8">
-                  {s.features.map((f, j) => (
-                    <li key={j} className="flex items-center text-sm text-slate-300">
-                      <CheckCircle2 className="w-4 h-4 text-brand-blue mr-2" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
+            <ScrollReveal key={i} direction="up" delay={i * 0.15}>
+              <motion.div
+                whileHover={{ y: -5 }}
+                className="relative p-8 rounded-3xl bg-glass neon-border overflow-hidden group flex flex-col h-full"
+              >
+                <div className="relative z-10 flex flex-col h-full">
+                  {s.videoId || s.videoUrl ? (
+                    <CardVideo videoId={s.videoId} videoUrl={s.videoUrl} />
+                  ) : (
+                    <div className="w-16 h-16 bg-brand-blue/10 rounded-2xl flex items-center justify-center text-brand-blue mb-6">
+                      {s.icon}
+                    </div>
+                  )}
+                  <h3 className="text-2xl font-bold mb-4 text-white">{s.title}</h3>
+                  <p className="text-slate-400 mb-6 leading-relaxed">{s.description}</p>
+                  <ul className="space-y-3 mt-auto mb-8">
+                    {s.features.map((f, j) => (
+                      <li key={j} className="flex items-center text-sm text-slate-300">
+                        <CheckCircle2 className="w-4 h-4 text-brand-blue mr-2" />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
 
-                {(s.title === "Enterprise AI Integration" || s.title === "AI Chatbots" || s.title === "AI Voice Agents") && (
-                  <button 
-                    onClick={() => {
-                      if (s.videoId) {
-                        window.open(`https://www.youtube.com/watch?v=${s.videoId}`, '_blank');
-                      } else if (s.videoUrl) {
-                        window.open(s.videoUrl, '_blank');
-                      }
-                    }}
-                    className="w-full py-4 bg-brand-blue text-brand-black rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-brand-cyan transition-all glow-blue group/btn"
-                  >
-                    <Play className="w-5 h-5 fill-current" />
-                    Watch Full Demo
-                    <ExternalLink className="w-4 h-4 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
-                  </button>
-                )}
-              </div>
-            </motion.div>
+                  {(s.title === "Enterprise AI Integration" || s.title === "AI Chatbots" || s.title === "AI Voice Agents") && (
+                    <button 
+                      onClick={() => {
+                        if (s.videoId) {
+                          window.open(`https://www.youtube.com/watch?v=${s.videoId}`, '_blank');
+                        } else if (s.videoUrl) {
+                          window.open(s.videoUrl, '_blank');
+                        }
+                      }}
+                      className="w-full py-4 bg-brand-blue text-brand-black rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-brand-cyan transition-all glow-blue group/btn"
+                    >
+                      <Play className="w-5 h-5 fill-current" />
+                      Watch Full Demo
+                      <ExternalLink className="w-4 h-4 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
+                    </button>
+                  )}
+                </div>
+              </motion.div>
+            </ScrollReveal>
           ))}
         </div>
       </div>
@@ -682,41 +683,44 @@ const IndustriesSection = ({ showHeader = true }: { showHeader?: boolean }) => {
     <section className="py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {showHeader && (
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Industries We Serve</h2>
-            <p className="text-slate-400 max-w-2xl mx-auto">Tailored AI solutions for high-growth sectors looking to automate and scale.</p>
-          </div>
+          <ScrollReveal direction="up">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Industries We Serve</h2>
+              <p className="text-slate-400 max-w-2xl mx-auto">Tailored AI solutions for high-growth sectors looking to automate and scale.</p>
+            </div>
+          </ScrollReveal>
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {industries.map((ind, i) => (
-            <div 
-              key={i} 
-              className="p-8 rounded-3xl bg-white/5 border border-white/5 text-left hover:bg-brand-blue/5 hover:border-brand-blue/20 transition-all group overflow-hidden flex flex-col cursor-pointer"
-              onClick={() => ind.image && setSelectedImage({ src: ind.image, alt: ind.name })}
-            >
-              {ind.image && (
-                <div className="w-full aspect-video mb-6 rounded-2xl overflow-hidden border border-white/10 relative">
-                  <img 
-                    src={ind.image} 
-                    alt={ind.name} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute inset-0 bg-brand-blue/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <Maximize2 className="w-8 h-8 text-white" />
+            <ScrollReveal key={i} direction="up" delay={(i % 3) * 0.1} distance={30}>
+              <div 
+                className="p-8 rounded-3xl bg-white/5 border border-white/5 text-left hover:bg-brand-blue/5 hover:border-brand-blue/20 transition-all group overflow-hidden flex flex-col cursor-pointer h-full"
+                onClick={() => ind.image && setSelectedImage({ src: ind.image, alt: ind.name })}
+              >
+                {ind.image && (
+                  <div className="w-full aspect-video mb-6 rounded-2xl overflow-hidden border border-white/10 relative">
+                    <img 
+                      src={ind.image} 
+                      alt={ind.name} 
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      referrerPolicy="no-referrer"
+                    />
+                    <div className="absolute inset-0 bg-brand-blue/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <Maximize2 className="w-8 h-8 text-white" />
+                    </div>
                   </div>
+                )}
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-lg bg-brand-blue/10 flex items-center justify-center text-brand-blue group-hover:scale-110 transition-transform">
+                    {ind.icon}
+                  </div>
+                  <h3 className="text-lg font-bold text-white group-hover:text-brand-blue transition-colors">{ind.name}</h3>
                 </div>
-              )}
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-lg bg-brand-blue/10 flex items-center justify-center text-brand-blue group-hover:scale-110 transition-transform">
-                  {ind.icon}
-                </div>
-                <h3 className="text-lg font-bold text-white group-hover:text-brand-blue transition-colors">{ind.name}</h3>
+                <p className="text-sm text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors">
+                  {ind.description}
+                </p>
               </div>
-              <p className="text-sm text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors">
-                {ind.description}
-              </p>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>
@@ -897,14 +901,8 @@ const Footer = ({ setCurrentPage }: { setCurrentPage: (p: Page) => void }) => (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
         <div className="col-span-1 md:col-span-2">
-          <div className="flex items-center mb-6">
-            <img 
-              src="https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Anvil%20logo.png" 
-              alt="Anvilai LLC Logo" 
-              className="h-10 w-auto mr-3 object-contain drop-shadow-[0_0_8px_rgba(59,130,246,0.2)]"
-              referrerPolicy="no-referrer"
-            />
-            <span className="text-lg font-extrabold text-white tracking-tighter uppercase">Anvilai LLC</span>
+          <div className="flex items-center mb-6 cursor-pointer" onClick={() => setCurrentPage('home')}>
+            <AnvilLogo variant="full" size={40} />
           </div>
           <p className="text-slate-400 max-w-sm mb-6">
             Enterprise-Ready AI Automation Agency helping U.S. businesses scale through intelligent systems and workflow optimization.
@@ -947,91 +945,285 @@ const Footer = ({ setCurrentPage }: { setCurrentPage: (p: Page) => void }) => (
 
 // --- Pages ---
 
+const ROICalculator = ({ setPage }: { setPage: (p: Page) => void }) => {
+  const [hourlyRate, setHourlyRate] = useState(30);
+  const [weeklyHours, setWeeklyHours] = useState(25);
+  const [missedLeads, setMissedLeads] = useState(30);
+  const [avgDealValue, setAvgDealValue] = useState(1500);
+
+  // Calculations
+  const monthlyHoursSaved = Math.round(weeklyHours * 4.3);
+  const monthlyCostSaved = Math.round(monthlyHoursSaved * hourlyRate);
+  
+  // We assume we capture/recover 30% of the missed leads with 24/7 instant AI reply
+  const recoveredLeads = Math.round(missedLeads * 0.3);
+  const monthlyRevenueRecovered = recoveredLeads * avgDealValue;
+  
+  const totalMonthlySavings = monthlyCostSaved + monthlyRevenueRecovered;
+  const totalYearlySavings = totalMonthlySavings * 12;
+
+  return (
+    <section className="py-24 bg-gradient-to-br from-brand-navy/40 to-brand-black relative overflow-hidden border-y border-white/5">
+      {/* Background radial highlight */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-[100px] pointer-events-none" />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <ScrollReveal direction="up">
+          <div className="text-center mb-16">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-brand-blue/10 border border-brand-blue/20 text-brand-blue text-xs font-bold uppercase tracking-widest mb-4">
+              U.S. Enterprise Standards
+            </span>
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">
+              Interactive <span className="text-gradient">ROI Savings Engine</span>
+            </h2>
+            <p className="text-slate-400 max-w-2xl mx-auto text-base">
+              Calculate the exact time and capital your business can recover by automating repetitive manual processes and handling inbound leads 24/7.
+            </p>
+          </div>
+        </ScrollReveal>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
+          {/* Controls */}
+          <ScrollReveal direction="left" className="lg:col-span-7 flex flex-col justify-between">
+            <div className="bg-white/5 border border-white/5 rounded-[32px] p-8 md:p-10 flex flex-col justify-between backdrop-blur-md h-full w-full">
+              <div>
+                <h3 className="text-xl font-bold text-white mb-8 flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-brand-blue animate-pulse" />
+                  Configure Your Operational Baseline
+                </h3>
+                
+                <div className="space-y-8">
+                  {/* Slider 1 */}
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-slate-300 font-medium">Average Staff Hourly Rate</span>
+                      <span className="text-brand-blue font-bold text-base">${hourlyRate}/hr</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="15" 
+                      max="120" 
+                      value={hourlyRate} 
+                      onChange={(e) => setHourlyRate(Number(e.target.value))}
+                      className="w-full accent-brand-blue cursor-pointer h-1.5 bg-white/10 rounded-lg appearance-none"
+                    />
+                    <div className="flex justify-between text-[10px] text-slate-500 font-bold uppercase">
+                      <span>$15</span>
+                      <span>$120</span>
+                    </div>
+                  </div>
+
+                  {/* Slider 2 */}
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-slate-300 font-medium">Repetitive Work hours / week <span className="text-xs text-slate-500">(Admin, Follow-up, Booking)</span></span>
+                      <span className="text-brand-blue font-bold text-base">{weeklyHours} hrs</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="5" 
+                      max="100" 
+                      value={weeklyHours} 
+                      onChange={(e) => setWeeklyHours(Number(e.target.value))}
+                      className="w-full accent-brand-blue cursor-pointer h-1.5 bg-white/10 rounded-lg appearance-none"
+                    />
+                    <div className="flex justify-between text-[10px] text-slate-500 font-bold uppercase">
+                      <span>5 Hrs</span>
+                      <span>100 Hrs</span>
+                    </div>
+                  </div>
+
+                  {/* Slider 3 */}
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-slate-300 font-medium">Missed/Delayed Leads / month <span className="text-xs text-slate-500">(After-hours or slow replies)</span></span>
+                      <span className="text-brand-blue font-bold text-base">{missedLeads} leads</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="5" 
+                      max="200" 
+                      value={missedLeads} 
+                      onChange={(e) => setMissedLeads(Number(e.target.value))}
+                      className="w-full accent-brand-blue cursor-pointer h-1.5 bg-white/10 rounded-lg appearance-none"
+                    />
+                    <div className="flex justify-between text-[10px] text-slate-500 font-bold uppercase">
+                      <span>5 Leads</span>
+                      <span>200 Leads</span>
+                    </div>
+                  </div>
+
+                  {/* Slider 4 */}
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-slate-300 font-medium">Average Deal / Customer Value</span>
+                      <span className="text-brand-blue font-bold text-base">${avgDealValue.toLocaleString()}</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="100" 
+                      max="10000" 
+                      step="100"
+                      value={avgDealValue} 
+                      onChange={(e) => setAvgDealValue(Number(e.target.value))}
+                      className="w-full accent-brand-blue cursor-pointer h-1.5 bg-white/10 rounded-lg appearance-none"
+                    />
+                    <div className="flex justify-between text-[10px] text-slate-500 font-bold uppercase">
+                      <span>$100</span>
+                      <span>$10,000</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <p className="mt-8 text-xs text-slate-500 italic leading-relaxed">
+                *Calculations are conservative projections assuming a 30% capture rate on missed inbound leads via 24/7 conversational AI agents and zero-delay follow-ups.
+              </p>
+            </div>
+          </ScrollReveal>
+
+          {/* Results Display */}
+          <ScrollReveal direction="right" className="lg:col-span-5 flex flex-col justify-between">
+            <div className="bg-gradient-to-b from-brand-navy to-brand-black border border-brand-blue/20 rounded-[32px] p-8 md:p-10 flex flex-col justify-between glow-blue relative overflow-hidden h-full w-full">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-brand-blue/10 rounded-full blur-2xl pointer-events-none" />
+              
+              <div className="relative z-10">
+                <h3 className="text-sm font-bold text-brand-blue uppercase tracking-widest mb-6">Estimated Impact</h3>
+                
+                <div className="space-y-6">
+                  <div>
+                    <p className="text-xs text-slate-400 font-medium uppercase tracking-widest mb-1">Time Recovered</p>
+                    <p className="text-2xl font-black text-white italic">{monthlyHoursSaved} <span className="text-sm font-bold text-slate-400 not-italic">Hours / Month</span></p>
+                  </div>
+                  
+                  <div>
+                    <p className="text-xs text-slate-400 font-medium uppercase tracking-widest mb-1">Operational Cost Saved</p>
+                    <p className="text-2xl font-black text-white italic">${monthlyCostSaved.toLocaleString()} <span className="text-sm font-bold text-slate-400 not-italic">/ Month</span></p>
+                  </div>
+
+                  <div>
+                    <p className="text-xs text-slate-400 font-medium uppercase tracking-widest mb-1">Revenue Recovered</p>
+                    <p className="text-2xl font-black text-white italic">${monthlyRevenueRecovered.toLocaleString()} <span className="text-sm font-bold text-slate-400 not-italic">/ Month</span></p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-10 pt-8 border-t border-white/10 relative z-10">
+                <p className="text-xs text-slate-400 font-medium uppercase tracking-widest mb-2">Total Projected Yearly Value</p>
+                <p className="text-4xl md:text-5xl font-black text-gradient italic mb-8">
+                  ${totalYearlySavings.toLocaleString()}
+                </p>
+                
+                <button 
+                  onClick={() => setPage('booking')}
+                  className="w-full py-5 bg-brand-blue hover:bg-brand-cyan text-brand-black font-extrabold rounded-2xl transition-all shadow-xl flex items-center justify-center gap-2 group cursor-pointer"
+                >
+                  Claim This ROI
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
+            </div>
+          </ScrollReveal>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const HomePage = ({ setPage }: { setPage: (p: Page) => void }) => (
   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
     <Hero onCtaClick={setPage} />
     <ServicesGrid />
     <IndustriesSection />
+    <ROICalculator setPage={setPage} />
     
     {/* Why Choose Us */}
     <section className="py-24 bg-brand-navy/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-8">Why Partner With <span className="text-gradient">Anvilai LLC?</span></h2>
-            <div className="space-y-8">
-              {[
-                { title: "Enterprise-Ready", desc: "We build systems that scale with your business, using robust infrastructure and security protocols." },
-                { title: "Results-Focused", desc: "No hype. We focus on measurable metrics: consultation bookings, lead capture, and cost reduction." },
-                { title: "U.S. Focused Expertise", desc: "Deep understanding of the U.S. market, business culture, and customer expectations." }
-              ].map((item, i) => (
-                <div key={i} className="flex gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-brand-blue/10 flex items-center justify-center text-brand-blue">
-                    <Zap className="w-6 h-6" />
+          <ScrollReveal direction="left">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold mb-8">Why Partner With <span className="text-gradient">Anvilai LLC?</span></h2>
+              <div className="space-y-8">
+                {[
+                  { title: "Enterprise-Ready", desc: "We build systems that scale with your business, using robust infrastructure and security protocols." },
+                  { title: "Results-Focused", desc: "No hype. We focus on measurable metrics: consultation bookings, lead capture, and cost reduction." },
+                  { title: "U.S. Focused Expertise", desc: "Deep understanding of the U.S. market, business culture, and customer expectations." }
+                ].map((item, i) => (
+                  <div key={i} className="flex gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-brand-blue/10 flex items-center justify-center text-brand-blue">
+                      <Zap className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-bold text-white mb-2">{item.title}</h4>
+                      <p className="text-slate-400 leading-relaxed">{item.desc}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-lg font-bold text-white mb-2">{item.title}</h4>
-                    <p className="text-slate-400 leading-relaxed">{item.desc}</p>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-          <div className="relative">
-            <div className="rounded-3xl overflow-hidden border border-white/10 shadow-2xl glow-blue">
-              <CardVideo videoId="tjbI1sgEQto" noMargin />
-            </div>
-            
-            {/* Watch Full Demo Button */}
-            <div className="mt-6">
-              <button 
-                onClick={() => window.open('https://www.youtube.com/watch?v=tjbI1sgEQto', '_blank')}
-                className="w-full py-4 bg-brand-blue text-brand-black rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-brand-cyan transition-all glow-blue group/btn"
-              >
-                <Play className="w-5 h-5 fill-current" />
-                Watch Full Demo
-                <ExternalLink className="w-4 h-4 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
-              </button>
-            </div>
+          </ScrollReveal>
+          <ScrollReveal direction="right">
+            <div className="relative">
+              <div className="rounded-3xl overflow-hidden border border-white/10 shadow-2xl glow-blue">
+                <CardVideo videoId="tjbI1sgEQto" noMargin />
+              </div>
+              
+              {/* Watch Full Demo Button */}
+              <div className="mt-6">
+                <button 
+                  onClick={() => window.open('https://www.youtube.com/watch?v=tjbI1sgEQto', '_blank')}
+                  className="w-full py-4 bg-brand-blue text-brand-black rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-brand-cyan transition-all glow-blue group/btn"
+                >
+                  <Play className="w-5 h-5 fill-current" />
+                  Watch Full Demo
+                  <ExternalLink className="w-4 h-4 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
+                </button>
+              </div>
 
-            {/* Floating Stats */}
-            <div className="absolute -bottom-6 -left-6 p-6 rounded-2xl bg-glass border border-white/10 shadow-2xl">
-              <p className="text-3xl font-bold text-white">24/7</p>
-              <p className="text-xs text-brand-blue font-bold uppercase tracking-widest">Automation</p>
+              {/* Floating Stats */}
+              <div className="absolute -bottom-6 -left-6 p-6 rounded-2xl bg-glass border border-white/10 shadow-2xl">
+                <p className="text-3xl font-bold text-white">24/7</p>
+                <p className="text-xs text-brand-blue font-bold uppercase tracking-widest">Automation</p>
+              </div>
+              <div className="absolute -top-6 -right-6 p-6 rounded-2xl bg-glass border border-white/10 shadow-2xl">
+                <p className="text-3xl font-bold text-white">100%</p>
+                <p className="text-xs text-brand-blue font-bold uppercase tracking-widest">U.S. Focused</p>
+              </div>
             </div>
-            <div className="absolute -top-6 -right-6 p-6 rounded-2xl bg-glass border border-white/10 shadow-2xl">
-              <p className="text-3xl font-bold text-white">100%</p>
-              <p className="text-xs text-brand-blue font-bold uppercase tracking-widest">U.S. Focused</p>
-            </div>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
 
     {/* Final CTA */}
-    <section className="py-24 relative overflow-hidden">
-      <div className="absolute inset-0 bg-brand-blue/5 blur-[120px]" />
-      <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-        <h2 className="text-4xl md:text-5xl font-bold mb-8">Ready to Automate Your <span className="text-gradient">Growth?</span></h2>
-        <p className="text-xl text-slate-400 mb-10">Join the ranks of enterprise-ready businesses leveraging AI to dominate their market.</p>
-        <button 
-          onClick={() => setPage('contact')}
-          className="bg-brand-blue text-brand-black px-10 py-5 rounded-full font-bold text-xl hover:bg-brand-cyan transition-all glow-blue"
-        >
-          Book Your Strategy Call Now
-        </button>
-      </div>
-    </section>
+    <ScrollReveal direction="up">
+      <section className="py-24 relative overflow-hidden">
+        <div className="absolute inset-0 bg-brand-blue/5 blur-[120px]" />
+        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
+          <h2 className="text-4xl md:text-5xl font-bold mb-8">Ready to Automate Your <span className="text-gradient">Growth?</span></h2>
+          <p className="text-xl text-slate-400 mb-10">Join the ranks of enterprise-ready businesses leveraging AI to dominate their market.</p>
+          <button 
+            onClick={() => setPage('contact')}
+            className="bg-brand-blue text-brand-black px-10 py-5 rounded-full font-bold text-xl hover:bg-brand-cyan transition-all glow-blue"
+          >
+            Book Your Strategy Call Now
+          </button>
+        </div>
+      </section>
+    </ScrollReveal>
   </motion.div>
 );
 
 const ServicesPage = () => (
   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pt-32 pb-24">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="mb-20">
-        <h1 className="text-4xl md:text-6xl font-bold mb-6">Our <span className="text-gradient">Services</span></h1>
-        <p className="text-xl text-slate-400 max-w-3xl">We provide end-to-end AI implementation, from initial strategy to deployment and ongoing optimization.</p>
-      </div>
+      <ScrollReveal direction="up">
+        <div className="mb-20">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6">Our <span className="text-gradient">Services</span></h1>
+          <p className="text-xl text-slate-400 max-w-3xl">We provide end-to-end AI implementation, from initial strategy to deployment and ongoing optimization.</p>
+        </div>
+      </ScrollReveal>
       
       <div className="space-y-24">
         {[
@@ -1063,56 +1255,58 @@ const ServicesPage = () => (
             image: "https://picsum.photos/seed/workflow/800/600"
           }
         ].map((s, i) => (
-          <div key={i} className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center p-8 md:p-12 rounded-[40px] bg-glass border border-white/5">
-            <div>
-              <div className="w-20 h-20 bg-brand-blue/10 rounded-3xl flex items-center justify-center text-brand-blue mb-8">
-                {s.icon}
+          <ScrollReveal key={i} direction="up" delay={i * 0.15}>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center p-8 md:p-12 rounded-[40px] bg-glass border border-white/5">
+              <div>
+                <div className="w-20 h-20 bg-brand-blue/10 rounded-3xl flex items-center justify-center text-brand-blue mb-8">
+                  {s.icon}
+                </div>
+                <h2 className="text-3xl font-bold mb-6 text-white">{s.title}</h2>
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="text-brand-blue text-xs font-bold uppercase tracking-widest mb-2">The Business Problem</h4>
+                    <p className="text-slate-300">{s.problem}</p>
+                  </div>
+                  <div>
+                    <h4 className="text-brand-blue text-xs font-bold uppercase tracking-widest mb-2">The AI Solution</h4>
+                    <p className="text-slate-300">{s.solution}</p>
+                  </div>
+                  <div className="p-4 rounded-xl bg-brand-blue/5 border border-brand-blue/20 mb-8">
+                    <h4 className="text-brand-blue text-xs font-bold uppercase tracking-widest mb-2">Expected ROI Value</h4>
+                    <p className="text-white font-semibold">{s.roi}</p>
+                  </div>
+                  
+                  {(s.videoId || s.videoUrl) && (
+                    <button 
+                      onClick={() => {
+                        if (s.videoId) {
+                          window.open(`https://www.youtube.com/watch?v=${s.videoId}`, '_blank');
+                        } else if (s.videoUrl) {
+                          window.open(s.videoUrl, '_blank');
+                        }
+                      }}
+                      className="w-full py-4 bg-brand-blue text-brand-black rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-brand-cyan transition-all glow-blue group/btn"
+                    >
+                      <Play className="w-5 h-5 fill-current" />
+                      Watch Full Demo
+                      <ExternalLink className="w-4 h-4 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
+                    </button>
+                  )}
+                </div>
               </div>
-              <h2 className="text-3xl font-bold mb-6 text-white">{s.title}</h2>
-              <div className="space-y-6">
-                <div>
-                  <h4 className="text-brand-blue text-xs font-bold uppercase tracking-widest mb-2">The Business Problem</h4>
-                  <p className="text-slate-300">{s.problem}</p>
+              <div className="relative group/video">
+                <div className="aspect-video rounded-3xl bg-brand-black/50 border border-white/10 overflow-hidden shadow-2xl relative">
+                  {s.videoId || s.videoUrl ? (
+                    <CardVideo videoId={s.videoId} videoUrl={s.videoUrl} noMargin />
+                  ) : (
+                    <img src={s.image} alt={s.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  )}
                 </div>
-                <div>
-                  <h4 className="text-brand-blue text-xs font-bold uppercase tracking-widest mb-2">The AI Solution</h4>
-                  <p className="text-slate-300">{s.solution}</p>
-                </div>
-                <div className="p-4 rounded-xl bg-brand-blue/5 border border-brand-blue/20 mb-8">
-                  <h4 className="text-brand-blue text-xs font-bold uppercase tracking-widest mb-2">Expected ROI Value</h4>
-                  <p className="text-white font-semibold">{s.roi}</p>
-                </div>
-                
-                {(s.videoId || s.videoUrl) && (
-                  <button 
-                    onClick={() => {
-                      if (s.videoId) {
-                        window.open(`https://www.youtube.com/watch?v=${s.videoId}`, '_blank');
-                      } else if (s.videoUrl) {
-                        window.open(s.videoUrl, '_blank');
-                      }
-                    }}
-                    className="w-full py-4 bg-brand-blue text-brand-black rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-brand-cyan transition-all glow-blue group/btn"
-                  >
-                    <Play className="w-5 h-5 fill-current" />
-                    Watch Full Demo
-                    <ExternalLink className="w-4 h-4 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
-                  </button>
-                )}
+                {/* Optional Decoration */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-brand-blue/20 to-brand-cyan/20 rounded-[35px] blur-xl opacity-0 group-hover/video:opacity-100 transition-opacity pointer-events-none -z-10" />
               </div>
             </div>
-            <div className="relative group/video">
-              <div className="aspect-video rounded-3xl bg-brand-black/50 border border-white/10 overflow-hidden shadow-2xl relative">
-                {s.videoId || s.videoUrl ? (
-                  <CardVideo videoId={s.videoId} videoUrl={s.videoUrl} noMargin />
-                ) : (
-                  <img src={s.image} alt={s.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                )}
-              </div>
-              {/* Optional Decoration */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-brand-blue/20 to-brand-cyan/20 rounded-[35px] blur-xl opacity-0 group-hover/video:opacity-100 transition-opacity pointer-events-none -z-10" />
-            </div>
-          </div>
+          </ScrollReveal>
         ))}
       </div>
     </div>
@@ -2119,109 +2313,125 @@ const AboutPage = () => (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* SECTION 1: INTRO / POSITIONING */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center mb-32">
-        <div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-8 tracking-tight">Positioning for the <span className="text-gradient">Future</span></h1>
-          <div className="space-y-6">
-            <p className="text-xl text-slate-200 leading-relaxed">
-              Anvilai LLC is a U.S.-focused AI Automation Agency that designs and deploys intelligent voice systems and workflow automation for modern businesses.
-            </p>
-            <p className="text-lg text-slate-400 leading-relaxed">
-              We help organizations streamline operations, capture more opportunities, and scale efficiently through tailored AI infrastructure.
-            </p>
+        <ScrollReveal direction="left">
+          <div>
+            <h1 className="text-4xl md:text-6xl font-bold mb-8 tracking-tight">Positioning for the <span className="text-gradient">Future</span></h1>
+            <div className="space-y-6">
+              <p className="text-xl text-slate-200 leading-relaxed">
+                Anvilai LLC is a U.S.-focused AI Automation Agency that designs and deploys intelligent voice systems and workflow automation for modern businesses.
+              </p>
+              <p className="text-lg text-slate-400 leading-relaxed">
+                We help organizations streamline operations, capture more opportunities, and scale efficiently through tailored AI infrastructure.
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="relative">
-          <div className="aspect-[4/5] rounded-[40px] bg-gradient-to-br from-brand-blue/20 to-brand-cyan/20 border border-white/10 overflow-hidden glow-blue">
-            <img 
-              src="https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Felix%20About%20Pic.png" 
-              alt="Felix - Founder of Anvilai LLC" 
-              className="w-full h-full object-cover" 
-              referrerPolicy="no-referrer" 
-            />
+        </ScrollReveal>
+        <ScrollReveal direction="right">
+          <div className="relative">
+            <div className="aspect-[4/5] rounded-[40px] bg-gradient-to-br from-brand-blue/20 to-brand-cyan/20 border border-white/10 overflow-hidden glow-blue">
+              <img 
+                src="https://qdwauwxnjswptcxbncwh.supabase.co/storage/v1/object/public/Felix%20Tech%20Solution%20Web%20pictures/Felix%20About%20Pic.png" 
+                alt="Felix - Founder of Anvilai LLC" 
+                className="w-full h-full object-cover" 
+                referrerPolicy="no-referrer" 
+              />
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
 
       {/* SECTION 2: VISION & MISSION */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-32">
-        <div className="p-10 rounded-[32px] bg-glass border border-white/5 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-            <Target className="w-24 h-24 text-brand-blue" />
+        <ScrollReveal direction="up" delay={0}>
+          <div className="p-10 rounded-[32px] bg-glass border border-white/5 relative overflow-hidden group h-full">
+            <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+              <Target className="w-24 h-24 text-brand-blue" />
+            </div>
+            <h4 className="text-brand-blue font-bold uppercase tracking-widest text-sm mb-4">Our Vision</h4>
+            <p className="text-2xl text-white font-medium leading-snug">
+              To become the standard for enterprise-grade AI implementation in the United States.
+            </p>
           </div>
-          <h4 className="text-brand-blue font-bold uppercase tracking-widest text-sm mb-4">Our Vision</h4>
-          <p className="text-2xl text-white font-medium leading-snug">
-            To become the standard for enterprise-grade AI implementation in the United States.
-          </p>
-        </div>
-        <div className="p-10 rounded-[32px] bg-glass border border-white/5 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-            <Zap className="w-24 h-24 text-brand-cyan" />
+        </ScrollReveal>
+        <ScrollReveal direction="up" delay={0.15}>
+          <div className="p-10 rounded-[32px] bg-glass border border-white/5 relative overflow-hidden group h-full">
+            <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+              <Zap className="w-24 h-24 text-brand-cyan" />
+            </div>
+            <h4 className="text-brand-cyan font-bold uppercase tracking-widest text-sm mb-4">Our Mission</h4>
+            <p className="text-2xl text-white font-medium leading-snug">
+              To empower businesses with scalable growth systems that eliminate manual repetitive tasks, improve response times, and increase operational efficiency.
+            </p>
           </div>
-          <h4 className="text-brand-cyan font-bold uppercase tracking-widest text-sm mb-4">Our Mission</h4>
-          <p className="text-2xl text-white font-medium leading-snug">
-            To empower businesses with scalable growth systems that eliminate manual repetitive tasks, improve response times, and increase operational efficiency.
-          </p>
-        </div>
+        </ScrollReveal>
       </div>
 
       {/* SECTION 3: MEET THE FOUNDER */}
-      <div className="mb-32">
-        <div className="max-w-3xl">
-          <h2 className="text-3xl md:text-4xl font-bold mb-8">Meet Felix — <span className="text-gradient">Founder of Anvilai LLC</span></h2>
-          <div className="space-y-6 text-slate-400 text-lg leading-relaxed">
-            <p>
-              Felix is the founder of Anvilai LLC, an AI Automation Agency focused on helping U.S. businesses eliminate inefficiencies and scale through intelligent systems.
-            </p>
-            <p>
-              With a strong focus on automation, AI-driven communication, and operational workflows, Felix built the company to solve a critical problem many businesses face — manual processes that slow growth and reduce efficiency.
-            </p>
-            <p>
-              Rather than offering generic solutions, Anvilai LLC is designed to create tailored AI systems that integrate directly into business operations — from lead capture and follow-up to customer support and sales automation.
-            </p>
+      <ScrollReveal direction="up">
+        <div className="mb-32">
+          <div className="max-w-3xl">
+            <h2 className="text-3xl md:text-4xl font-bold mb-8">Meet Felix — <span className="text-gradient">Founder of Anvilai LLC</span></h2>
+            <div className="space-y-6 text-slate-400 text-lg leading-relaxed">
+              <p>
+                Felix is the founder of Anvilai LLC, an AI Automation Agency focused on helping U.S. businesses eliminate inefficiencies and scale through intelligent systems.
+              </p>
+              <p>
+                With a strong focus on automation, AI-driven communication, and operational workflows, Felix built the company to solve a critical problem many businesses face — manual processes that slow growth and reduce efficiency.
+              </p>
+              <p>
+                Rather than offering generic solutions, Anvilai LLC is designed to create tailored AI systems that integrate directly into business operations — from lead capture and follow-up to customer support and sales automation.
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </ScrollReveal>
 
       {/* SECTION 4: THE STORY */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start mb-32">
-        <div className="sticky top-32">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">The Story Behind <br/><span className="text-gradient">Anvilai LLC</span></h2>
-          <div className="w-20 h-1 bg-brand-blue rounded-full" />
-        </div>
-        <div className="space-y-8 text-slate-400 text-lg leading-relaxed">
-          <p>
-            Anvilai LLC was founded on a clear observation: many businesses lose revenue daily due to slow response times, missed leads, and inefficient systems.
-          </p>
-          <p>
-            While AI technology has advanced rapidly, most organizations struggle to implement it in a practical and results-driven way.
-          </p>
-          <p>
-            Felix identified the gap between what AI is capable of and how businesses are actually using it.
-          </p>
-          <div className="p-8 rounded-3xl bg-white/5 border border-white/10">
-            <p className="text-white font-bold mb-6">Anvilai LLC was built to close that gap by delivering scalable AI systems that:</p>
-            <ul className="space-y-4">
-              {[
-                "Respond instantly to leads",
-                "Automate repetitive workflows",
-                "Improve customer experience",
-                "Increase operational efficiency"
-              ].map((item, i) => (
-                <li key={i} className="flex items-center gap-3 text-slate-300">
-                  <div className="w-1.5 h-1.5 rounded-full bg-brand-blue" />
-                  {item}
-                </li>
-              ))}
-            </ul>
+        <ScrollReveal direction="left">
+          <div className="sticky top-32">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">The Story Behind <br/><span className="text-gradient">Anvilai LLC</span></h2>
+            <div className="w-20 h-1 bg-brand-blue rounded-full" />
           </div>
-        </div>
+        </ScrollReveal>
+        <ScrollReveal direction="right">
+          <div className="space-y-8 text-slate-400 text-lg leading-relaxed">
+            <p>
+              Anvilai LLC was founded on a clear observation: many businesses lose revenue daily due to slow response times, missed leads, and inefficient systems.
+            </p>
+            <p>
+              While AI technology has advanced rapidly, most organizations struggle to implement it in a practical and results-driven way.
+            </p>
+            <p>
+              Felix identified the gap between what AI is capable of and how businesses are actually using it.
+            </p>
+            <div className="p-8 rounded-3xl bg-white/5 border border-white/10">
+              <p className="text-white font-bold mb-6">Anvilai LLC was built to close that gap by delivering scalable AI systems that:</p>
+              <ul className="space-y-4">
+                {[
+                  "Respond instantly to leads",
+                  "Automate repetitive workflows",
+                  "Improve customer experience",
+                  "Increase operational efficiency"
+                ].map((item, i) => (
+                  <li key={i} className="flex items-center gap-3 text-slate-300">
+                    <div className="w-1.5 h-1.5 rounded-full bg-brand-blue" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </ScrollReveal>
       </div>
 
       {/* SECTION 5: EXPERIENCE & EXPERTISE */}
-      <div className="text-center mb-16">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">Experience & <span className="text-gradient">Expertise</span></h2>
-        <p className="text-slate-400 max-w-2xl mx-auto">We specialize in designing and deploying high-impact AI infrastructure.</p>
-      </div>
+      <ScrollReveal direction="up">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Experience & <span className="text-gradient">Expertise</span></h2>
+          <p className="text-slate-400 max-w-2xl mx-auto">We specialize in designing and deploying high-impact AI infrastructure.</p>
+        </div>
+      </ScrollReveal>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
@@ -2230,18 +2440,22 @@ const AboutPage = () => (
           { title: "Workflow Automation", desc: "CRM and process optimization for sales teams." },
           { title: "Lead Nurturing", desc: "Systems that convert prospects into loyal clients." }
         ].map((item, i) => (
-          <div key={i} className="p-8 rounded-3xl bg-glass border border-white/5 hover:border-brand-blue/30 transition-all group">
-            <h4 className="text-xl font-bold text-white mb-4 group-hover:text-brand-blue transition-colors">{item.title}</h4>
-            <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
-          </div>
+          <ScrollReveal key={i} direction="up" delay={i * 0.1}>
+            <div className="p-8 rounded-3xl bg-glass border border-white/5 hover:border-brand-blue/30 transition-all group h-full">
+              <h4 className="text-xl font-bold text-white mb-4 group-hover:text-brand-blue transition-colors">{item.title}</h4>
+              <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+            </div>
+          </ScrollReveal>
         ))}
       </div>
       
-      <div className="mt-16 text-center">
-        <p className="text-slate-500 italic">
-          Each system is built with a clear objective: deliver measurable business outcomes, not just technology.
-        </p>
-      </div>
+      <ScrollReveal direction="up" delay={0.2}>
+        <div className="mt-16 text-center">
+          <p className="text-slate-500 italic">
+            Each system is built with a clear objective: deliver measurable business outcomes, not just technology.
+          </p>
+        </div>
+      </ScrollReveal>
     </div>
     <FAQSection />
   </motion.div>
@@ -2251,64 +2465,68 @@ const ContactPage = ({ setPage }: { setPage: (p: Page) => void }) => (
   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pt-32 pb-24">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-        <div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-8">Let's Build Your <span className="text-gradient">AI Strategy</span></h1>
-          <p className="text-xl text-slate-400 mb-12">
-            Ready to transform your operations? Fill out the form or reach out via our direct channels.
-          </p>
-          
-          <div className="space-y-8">
-            <div className="p-8 rounded-3xl bg-gradient-to-br from-brand-blue/10 to-brand-cyan/10 border border-brand-blue/20">
-              <h3 className="text-2xl font-bold text-white mb-4">Direct Booking</h3>
-              <p className="text-slate-400 mb-6">Skip the form and pick a time that works for you on our calendar.</p>
-              <button 
-                onClick={() => setPage('booking')}
-                className="inline-flex items-center gap-2 bg-brand-blue text-brand-black px-8 py-4 rounded-xl font-bold hover:bg-brand-cyan transition-all glow-blue"
-              >
-                <Calendar className="w-5 h-5" />
-                Book Appointment Now
-              </button>
+        <ScrollReveal direction="left">
+          <div>
+            <h1 className="text-4xl md:text-6xl font-bold mb-8">Let's Build Your <span className="text-gradient">AI Strategy</span></h1>
+            <p className="text-xl text-slate-400 mb-12">
+              Ready to transform your operations? Fill out the form or reach out via our direct channels.
+            </p>
+            
+            <div className="space-y-8">
+              <div className="p-8 rounded-3xl bg-gradient-to-br from-brand-blue/10 to-brand-cyan/10 border border-brand-blue/20">
+                <h3 className="text-2xl font-bold text-white mb-4">Direct Booking</h3>
+                <p className="text-slate-400 mb-6">Skip the form and pick a time that works for you on our calendar.</p>
+                <button 
+                  onClick={() => setPage('booking')}
+                  className="inline-flex items-center gap-2 bg-brand-blue text-brand-black px-8 py-4 rounded-xl font-bold hover:bg-brand-cyan transition-all glow-blue"
+                >
+                  <Calendar className="w-5 h-5" />
+                  Book Appointment Now
+                </button>
+              </div>
+
+              <div className="flex items-center gap-6">
+                <div className="w-14 h-14 rounded-2xl bg-brand-blue/10 flex items-center justify-center text-brand-blue">
+                  <Mail className="w-6 h-6" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-brand-blue uppercase tracking-widest mb-1">Email Us</p>
+                  <a href="mailto:ibmodefelix7899@gmail.com" className="text-lg text-white font-medium hover:text-brand-blue transition-colors">ibmodefelix7899@gmail.com</a>
+                </div>
+              </div>
+              <div className="flex items-center gap-6">
+                <div className="w-14 h-14 rounded-2xl bg-brand-blue/10 flex items-center justify-center text-brand-blue">
+                  <MessageSquare className="w-6 h-6" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-brand-blue uppercase tracking-widest mb-1">WhatsApp</p>
+                  <a href="https://wa.me/2347025428992" target="_blank" rel="noopener noreferrer" className="text-lg text-white font-medium hover:text-brand-blue transition-colors">+234 702 542 8992</a>
+                </div>
+              </div>
             </div>
 
-            <div className="flex items-center gap-6">
-              <div className="w-14 h-14 rounded-2xl bg-brand-blue/10 flex items-center justify-center text-brand-blue">
-                <Mail className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-brand-blue uppercase tracking-widest mb-1">Email Us</p>
-                <a href="mailto:ibmodefelix7899@gmail.com" className="text-lg text-white font-medium hover:text-brand-blue transition-colors">ibmodefelix7899@gmail.com</a>
-              </div>
-            </div>
-            <div className="flex items-center gap-6">
-              <div className="w-14 h-14 rounded-2xl bg-brand-blue/10 flex items-center justify-center text-brand-blue">
-                <MessageSquare className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-brand-blue uppercase tracking-widest mb-1">WhatsApp</p>
-                <a href="https://wa.me/2347025428992" target="_blank" rel="noopener noreferrer" className="text-lg text-white font-medium hover:text-brand-blue transition-colors">+234 702 542 8992</a>
-              </div>
+            <div className="mt-16 p-8 rounded-3xl bg-brand-blue/5 border border-brand-blue/20">
+              <h4 className="text-white font-bold mb-4">What happens next?</h4>
+              <ul className="space-y-4">
+                {[
+                  "15-minute discovery call to assess your needs",
+                  "Custom AI automation plan tailored to your ROI",
+                  "Phased implementation and team training"
+                ].map((step, i) => (
+                  <li key={i} className="flex items-start text-sm text-slate-300">
+                    <span className="w-6 h-6 rounded-full bg-brand-blue text-brand-black flex items-center justify-center text-[10px] font-bold mr-3 mt-0.5">{i + 1}</span>
+                    {step}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
-
-          <div className="mt-16 p-8 rounded-3xl bg-brand-blue/5 border border-brand-blue/20">
-            <h4 className="text-white font-bold mb-4">What happens next?</h4>
-            <ul className="space-y-4">
-              {[
-                "15-minute discovery call to assess your needs",
-                "Custom AI automation plan tailored to your ROI",
-                "Phased implementation and team training"
-              ].map((step, i) => (
-                <li key={i} className="flex items-start text-sm text-slate-300">
-                  <span className="w-6 h-6 rounded-full bg-brand-blue text-brand-black flex items-center justify-center text-[10px] font-bold mr-3 mt-0.5">{i + 1}</span>
-                  {step}
-                </li>
-              ))}
-            </ul>
+        </ScrollReveal>
+        <ScrollReveal direction="right">
+          <div>
+            <ContactForm />
           </div>
-        </div>
-        <div>
-          <ContactForm />
-        </div>
+        </ScrollReveal>
       </div>
     </div>
     <div className="mt-24">
@@ -2354,6 +2572,169 @@ const BookingPage = () => (
   </motion.div>
 );
 
+// --- ElevenLabs Dynamic Voice Widget Customizer ---
+
+const ElevenLabsVoiceWidget = () => {
+  const [agentId, setAgentId] = useState(() => {
+    return localStorage.getItem('elevenlabs_agent_id') || '';
+  });
+  const [tempAgentId, setTempAgentId] = useState(agentId);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+
+  useEffect(() => {
+    if (agentId) {
+      const scriptId = 'elevenlabs-convai-widget';
+      if (!document.getElementById(scriptId)) {
+        const script = document.createElement('script');
+        script.id = scriptId;
+        script.src = "https://unpkg.com/@elevenlabs/convai-widget-embed";
+        script.async = true;
+        script.type = "text/javascript";
+        document.body.appendChild(script);
+      }
+    }
+  }, [agentId]);
+
+  const handleSave = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!tempAgentId.trim()) return;
+    localStorage.setItem('elevenlabs_agent_id', tempAgentId.trim());
+    setAgentId(tempAgentId.trim());
+    setIsSaved(true);
+    setTimeout(() => {
+      setIsSaved(false);
+      window.location.reload();
+    }, 1000);
+  };
+
+  const handleClear = () => {
+    localStorage.removeItem('elevenlabs_agent_id');
+    setAgentId('');
+    setTempAgentId('');
+    window.location.reload();
+  };
+
+  const ConvAIElement = 'elevenlabs-convai' as any;
+
+  return (
+    <>
+      {/* ElevenLabs Widget Custom Element - Only load if valid ID configured */}
+      {agentId && <ConvAIElement agent-id={agentId} />}
+
+      {/* Dynamic Floating Voice Companion Manager */}
+      <div className="fixed bottom-24 right-6 z-[99] flex flex-col items-end gap-3">
+        {/* Toggle Button */}
+        <motion.button
+          onClick={() => setIsOpen(!isOpen)}
+          className="p-3 bg-brand-navy/90 hover:bg-brand-blue border border-white/10 hover:border-brand-blue text-white rounded-full transition-all duration-300 shadow-xl flex items-center justify-center group"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          title="Configure AI Voice Agent"
+        >
+          <Settings className="w-5 h-5 text-brand-blue group-hover:text-brand-black group-hover:rotate-45 transition-transform duration-300" />
+        </motion.button>
+
+        {/* Floating Panel */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="w-80 md:w-96 p-6 bg-brand-navy/95 backdrop-blur-md border border-white/10 rounded-3xl shadow-2xl text-left"
+            >
+              <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/5">
+                <div className="flex items-center gap-2">
+                  <div className={`w-2.5 h-2.5 rounded-full ${agentId ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+                  <h4 className="font-extrabold text-sm text-white uppercase tracking-wider">AI Voice Sandbox</h4>
+                </div>
+                <button 
+                  onClick={() => setIsOpen(false)}
+                  className="p-1 text-slate-400 hover:text-white rounded-lg transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Configure and test your **ElevenLabs Conversational AI Voice Widget** in real time.
+                </p>
+
+                {/* Status indicator */}
+                <div className="p-3 bg-white/5 border border-white/5 rounded-2xl flex items-center justify-between">
+                  <span className="text-xs text-slate-400 font-medium">Status:</span>
+                  {agentId ? (
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-emerald-400">Active</span>
+                      <button
+                        onClick={handleClear}
+                        className="px-2 py-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 hover:text-rose-300 text-[10px] font-bold rounded-lg transition-all"
+                        title="Disable widget and clear ID"
+                      >
+                        Disable
+                      </button>
+                    </div>
+                  ) : (
+                    <span className="text-xs font-bold text-amber-400">Inactive</span>
+                  )}
+                </div>
+
+                {/* Agent ID Form */}
+                <form onSubmit={handleSave} className="space-y-2">
+                  <label className="block text-[10px] font-black uppercase tracking-widest text-brand-blue">
+                    ElevenLabs Agent ID
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={tempAgentId}
+                      onChange={(e) => setTempAgentId(e.target.value)}
+                      placeholder="e.g. agent_..."
+                      className="flex-1 px-3 py-2 bg-brand-black/50 border border-white/10 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-blue"
+                    />
+                    <button
+                      type="submit"
+                      disabled={isSaved}
+                      className="px-4 bg-brand-blue hover:bg-brand-cyan text-brand-black text-xs font-black rounded-xl transition-all flex items-center justify-center"
+                    >
+                      {isSaved ? <CheckCircle2 className="w-4 h-4" /> : 'Save'}
+                    </button>
+                  </div>
+                  {isSaved && (
+                    <p className="text-[10px] text-brand-cyan animate-pulse">
+                      Agent updated! Reloading application...
+                    </p>
+                  )}
+                </form>
+
+                {/* Debugging / Help Section */}
+                <div className="bg-brand-blue/5 border border-brand-blue/10 rounded-2xl p-4 space-y-3">
+                  <h5 className="text-[10px] font-black uppercase tracking-widest text-brand-blue flex items-center gap-1.5">
+                    <HelpCircle className="w-3.5 h-3.5" />
+                    How to Fix "Response does not contain widget_config"
+                  </h5>
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    If your agent fails to load, make sure you enable its public widget embed inside ElevenLabs:
+                  </p>
+                  <ul className="text-[11px] text-slate-400 space-y-1.5 list-disc pl-4 leading-relaxed">
+                    <li>Log into your **ElevenLabs Dashboard**.</li>
+                    <li>Go to **Conversational AI** and select your Agent.</li>
+                    <li>Click the **Widget** or **Security** tab.</li>
+                    <li>Find the **"Enable Widget"** toggle and switch it **ON**.</li>
+                    <li>Under **Allowed Domains**, add the domain of this application to prevent CORS blocks.</li>
+                  </ul>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </>
+  );
+};
+
 // --- Main App ---
 
 export default function App() {
@@ -2389,6 +2770,7 @@ export default function App() {
       </main>
 
       <Footer setCurrentPage={setCurrentPage} />
+      <ElevenLabsVoiceWidget />
     </div>
   );
 }
